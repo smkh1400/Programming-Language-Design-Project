@@ -1,107 +1,129 @@
-#lang racket
+#|
+MOHAMMADREZA KHOSRAVIAN
+SAM KHANAKI
+ALI SADEGHI
 
+LEXER FOR TOKENIZING TEXT INPUT CONSIDERING 'GRAMMAR.TXT'
+SHARIF UNIVERSITY OF TECHNOLOGY
+SPRING 2025
+|#
+
+#|
+REQUIREMENTS
+|#
+#lang racket
 (require parser-tools/lex
          (prefix-in : parser-tools/lex-sre))
 
-(define full-lexer 
+#|
+TOKEN DEFINTIONS
+|#
+(define-tokens value-tokens
+  (INT FLOAT STRING NULL ID TRUE FALSE EOF))
+
+(define-empty-tokens keyword-tokens
+  (VAR FUNC IF ELSE WHILE FOR PRINT RETURN BREAK CONTINUE
+   INTTYPE FLOATTYPE STRINGTYPE LIST NULLTYPE))
+
+(define-empty-tokens symbol-tokens
+  (SEMICOLON COLON COMMA OP CP OB CB OCB CCB
+   ASSIGNMENT PLUS MINUS TIMES DIVIDE MODULO
+   LT GT LET GET EQUALS NOTEQUALS AND OR NOT))
+
+#|
+LINE-NO TRACKING INITIALIZATION
+|#
+(define line-number 1)
+
+(define (update-line-number lexeme)
+  (when (regexp-match? #rx"\n" lexeme) 
+    (set! line-number (+ line-number 1))))
+
+#|
+LEXER
+|#
+(define lexer-full 
     (lexer
-        (whitespace (full-lexer input-port))
+        ;;Whitespace
+        (whitespace (lexer-full input-port))
 
-        (
-            (:or 
-                (:: (:+ (char-range #\0 #\9))) ;;;integer like 123 {\d+}
-                (:: (:: (:+ (char-range #\0 #\9)) #\. (:+ (char-range #\0 #\9))))  ;;;float like 123.456 {\d+}.{\d+}
-            )
-            (token-NUM (string->number lexeme)) ;;;convert string result to number result
-        )
+        ;;Numbers (Int & Float)
+        ((:+ (char-range #\0 #\9))
+         (token-INT (string->number lexeme)))
+        ((:: (:+ (char-range #\0 #\9)) #\. (:+ (char-range #\0 #\9)))
+         (token-FLOAT (string->number lexeme)))
 
-        (
-            (:or 
-                (:: #\" (:* (:~ #\")) #\")
-            )
-            (token-STRING (substring lexeme 1 (sub1 (string-length lexeme))))
-        )
+        ;;String (anything between double quotes)
+        ((:: #\" (:* (:~ #\")) #\")
+         (token-STRING (substring lexeme 1 (sub1 (string-length lexeme)))))
 
-        ((eof) (token-EOF))
-        (";" (token-SEMICOLON)) 
-        ("break" (token-BREAK)) 
-        ("continue" (token-CONTINUE)) 
-        ("=" (token-ASSIGNMENT)) 
-        ("return" (token-RETURN)) 
-        ("func" (token-FUNC)) 
-        ("var" (token-VAR))
-        ("int" (token-INTTYPE))
-        ("float" (token-FLOATTYPE))
-        ("string" (token-STRINGTYPE))
-        ("bool" (token-BOOL))
-        ("list" (token-LIST))
+        ;;Keywords
+        ("var" (token-VAR)) ("func" (token-FUNC)) ("if" (token-IF)) ("else" (token-ELSE))
+        ("while" (token-WHILE)) ("for" (token-FOR)) ("print" (token-PRINT))
+        ("return" (token-RETURN)) ("break" (token-BREAK)) ("continue" (token-CONTINUE))
+
+        ;;Types
+        ("int" (token-INTTYPE)) 
+        ("float" (token-FLOATTYPE)) 
+        ("string" (token-STRINGTYPE)) 
+        ("list" (token-LIST)) 
         ("nulltype" (token-NULLTYPE))
-        ("print" (token-PRINT))
-        ("(" (token-OP)) 
-        (")" (token-CP)) 
-        (":" (token-COLON)) 
-        ("," (token-COMMA))
-        ("if" (token-IF)) 
-        ("else" (token-ELSE))
-        ("for" (token-FOR))
-        ("while" (token-WHILE))
-        ("||" (token-OR))
-        ("&&" (token-AND))
+
+        ;;Operators & Symbols
+        ("=" (token-ASSIGNMENT)) ("+" (token-PLUS)) ("-" (token-MINUS))
+        ("*" (token-TIMES)) ("/" (token-DIVIDE)) ("%" (token-MODULO))
+        ("<" (token-LT)) (">" (token-GT)) ("<=" (token-LET)) (">=" (token-GET))
+        ("==" (token-EQUALS)) ("!=" (token-NOTEQUALS)) ("&&" (token-AND)) ("||" (token-OR))
         ("!" (token-NOT))
-        ("==" (token-EQUALS))
-        ("!=" (token-NOTEQUALS))
-        ("<" (token-LT)) 
-        ("<=" (token-LET)) 
-        (">" (token-GT)) 
-        (">=" (token-GET))
-        ("+" (token-PLUS)) 
-        ("-" (token-MINUS)) 
-        ("*" (token-TIMES)) 
-        ("/" (token-DIVIDE)) 
-        ("%" (token-MODULO)) 
-        ("[" (token-OB)) 
-        ("]" (token-CB))
-        ("{" (token-OCB))
-        ("}" (token-CCB))
-        ("true" (token-TRUE)) 
-        ("false" (token-FALSE)) 
-        ("NULL" (token-NULL)) 
-        (
-            (:+ 
-                (:or
-                    (char-range #\a #\z)
-                    (char-range #\A #\Z)
-                    #\_
-                )
-                (:*
-                    (:or 
-                        (char-range #\0 #\9) 
-                        (char-range #\a #\z) 
-                        (char-range #\A #\Z) 
-                        #\_
-                    )
-                )
-            ) 
-            (token-ID lexeme)
+
+        ;;Delimiters
+        (";" (token-SEMICOLON)) (":" (token-COLON)) ("," (token-COMMA))
+        ("(" (token-OP)) (")" (token-CP)) ("[" (token-OB)) ("]" (token-CB))
+        ("{" (token-OCB)) ("}" (token-CCB))
+
+        ;;Literals (Booleans & NULL)
+        ("true" (token-TRUE)) ("false" (token-FALSE)) ("NULL" (token-NULL))
+
+        ;;Identifiers (Var & Func names)
+        ((:+ (:or (char-range #\a #\z) (char-range #\A #\Z) #\_))
+         (token-ID lexeme))
+
+        ;;EOF
+        ((eof) (token-EOF #f))
+
+        ;;Error handling
+        (any-char
+         (lambda (lexeme)
+           (error (format "Unexpected character '~a' at line ~a"
+                          lexeme line-number))))
         )
-        (any-char (error (format "Unexpected character: ~a" lexeme)))
+  )
+
+#|
+TOKEN RETRIEVAL FUNCTIONS
+    -GET-TOKEN COMMUNICATES WITH THE PARSER, SENDING TOKENS UNTIL
+     EOF IS REACHED.
+     RETURNS TOKEN | FALSE IF EOF
+    -PROVIDE LEXER-FULL AND GET-TOKEN FOR PARSER
+|#
+(define (get-token input-port)
+  (let ([tok (lexer-full input-port)])
+    (if (eq? (token-name tok) 'EOF)
+        #f
+        tok)
     )
-)
+  )
 
-(define-tokens a (NUM ID STRING))
-(define-empty-tokens b (EOF SEMICOLON BREAK CONTINUE ASSIGNMENT RETURN FUNC VAR 
-                         INTTYPE FLOATTYPE STRINGTYPE BOOL LIST NULLTYPE PRINT
-                         OP CP COLON COMMA IF ELSE FOR WHILE OR AND NOT
-                         EQUALS NOTEQUALS LT LET GT GET PLUS MINUS TIMES DIVIDE MODULO
-                         OB CB OCB CCB TRUE FALSE NULL))
+(provide lexer-full get-token)
 
-(provide (all-defined-out))
-
+#|
+DEBUGGING PURPOSES
+|#
 (define (string->input-port str)
   (open-input-string str))
 
 (define (lex-all port)
-  (define token (full-lexer port))
+  (define token (lexer-full port))
   (if (eq? (token-name token) 'EOF)
       (list token)
       (cons token (lex-all port))))
