@@ -23,7 +23,7 @@ TOKEN DEFINTIONS
 
 (define-empty-tokens keyword-tokens
   (VAR FUNC IF ELSE WHILE FOR PRINT RETURN BREAK CONTINUE
-   INTTYPE FLOATTYPE STRINGTYPE LIST NULLTYPE))
+   INTTYPE FLOATTYPE BOOLTYPE STRINGTYPE LIST NULLTYPE))
 
 (define-empty-tokens symbol-tokens
   (SEMICOLON COLON COMMA OP CP OB CB OCB CCB
@@ -44,7 +44,7 @@ LEXER
 |#
 (define lexer-full 
     (lexer
-        ;;Whitespace
+        ;; Whitespace
         (whitespace (lexer-full input-port))
 
         ;;Numbers (Int & Float)
@@ -53,45 +53,46 @@ LEXER
         ((:: (:+ (char-range #\0 #\9)) #\. (:+ (char-range #\0 #\9)))
          (token-FLOAT (string->number lexeme)))
 
-        ;;String (anything between double quotes)
+        ;; String (anything between double quotes)
         ((:: #\" (:* (:~ #\")) #\")
          (token-STRING (substring lexeme 1 (sub1 (string-length lexeme)))))
 
-        ;;Keywords
+        ;; Keywords
         ("var" (token-VAR)) ("func" (token-FUNC)) ("if" (token-IF)) ("else" (token-ELSE))
         ("while" (token-WHILE)) ("for" (token-FOR)) ("print" (token-PRINT))
         ("return" (token-RETURN)) ("break" (token-BREAK)) ("continue" (token-CONTINUE))
 
-        ;;Types
+        ;; Types
         ("int" (token-INTTYPE)) 
-        ("float" (token-FLOATTYPE)) 
+        ("float" (token-FLOATTYPE))
+        ("bool" (token-BOOLTYPE))
         ("string" (token-STRINGTYPE)) 
         ("list" (token-LIST)) 
         ("nulltype" (token-NULLTYPE))
 
-        ;;Operators & Symbols
+        ;; Operators & Symbols
         ("=" (token-ASSIGNMENT)) ("+" (token-PLUS)) ("-" (token-MINUS))
         ("*" (token-TIMES)) ("/" (token-DIVIDE)) ("%" (token-MODULO))
         ("<" (token-LT)) (">" (token-GT)) ("<=" (token-LET)) (">=" (token-GET))
         ("==" (token-EQUALS)) ("!=" (token-NOTEQUALS)) ("&&" (token-AND)) ("||" (token-OR))
         ("!" (token-NOT))
 
-        ;;Delimiters
+        ;; Delimiters
         (";" (token-SEMICOLON)) (":" (token-COLON)) ("," (token-COMMA))
         ("(" (token-OP)) (")" (token-CP)) ("[" (token-OB)) ("]" (token-CB))
         ("{" (token-OCB)) ("}" (token-CCB))
 
-        ;;Literals (Booleans & NULL)
+        ;; Literals (Booleans & NULL)
         ("true" (token-TRUE)) ("false" (token-FALSE)) ("NULL" (token-NULL))
 
-        ;;Identifiers (Var & Func names)
+        ;; Identifiers (Var & Func names)
         ((:+ (:or (char-range #\a #\z) (char-range #\A #\Z) #\_))
          (token-ID lexeme))
 
-        ;;EOF
-        ((eof) (token-EOF #f))
+        ;; EOF
+        ((eof) (token-EOF 'EOF))
 
-        ;;Error handling
+        ;; Error handling
         (any-char
          (lambda (lexeme)
            (error (format "Unexpected character '~a' at line ~a"
@@ -99,57 +100,4 @@ LEXER
         )
   )
 
-#|
-TOKEN RETRIEVAL FUNCTIONS
-    -GET-TOKEN COMMUNICATES WITH THE PARSER, SENDING TOKENS UNTIL
-     EOF IS REACHED.
-     RETURNS TOKEN | FALSE IF EOF
-    -PROVIDE LEXER-FULL AND GET-TOKEN FOR PARSER
-|#
-(define (get-token input-port)
-  (let ([tok (lexer-full input-port)])
-    (if (eq? (token-name tok) 'EOF)
-        #f
-        tok)
-    )
-  )
-
-(provide lexer-full get-token)
-
-#|
-DEBUGGING PURPOSES
-|#
-(define (string->input-port str)
-  (open-input-string str))
-
-(define (lex-all port)
-  (define token (lexer-full port))
-  (if (eq? (token-name token) 'EOF)
-      (list token)
-      (cons token (lex-all port))))
-
-(define (display-tokens tokens)
-  (unless (null? tokens)
-    (let ([token (car tokens)])
-      (printf "~a: ~a\n" 
-              (token-name token) 
-              (or (token-value token) ""))
-    (display-tokens (cdr tokens))))
-)
-
-(define test-program 
-  "var x: int = 42;
-   func foo(a: int): int {
-     if (a > 0) {
-       return a * 2;
-     } else {
-       return -1;
-     }
-   }
-   print(foo(x));
-   "
-)
-
-(define input-port (string->input-port test-program))
-(define tokens (lex-all input-port))
-(display-tokens tokens)
+(provide (all-defined-out))

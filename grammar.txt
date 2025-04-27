@@ -3,17 +3,19 @@ Program → StatementList
 StatementList → Statement StatementList
               | ε
 
-Statement → VariableDeclaration
-           | FunctionDeclaration
-           | Assignment
+Statement → OtherStatement
            | IfStatement
-           | LoopStatement
-           | Block
-           | FunctionCall
-           | PrintStatement
-           | ReturnStatement
-           | BreakStatement
-           | ContinueStatement
+
+OtherStatement → VariableDeclaration
+                | FunctionDeclaration
+                | Assignment
+                | LoopStatement
+                | Block
+                | FunctionCallStmt
+                | PrintStatement
+                | ReturnStatement
+                | BreakStatement
+                | ContinueStatement
 
 BreakStatement → 'break' ';'
 
@@ -32,28 +34,42 @@ Type → 'int'
 
 FunctionDeclaration → 'func' Identifier '(' ParameterList ')' ':' Type Block
 
-ParameterList → Parameter ',' ParameterList
-              | Parameter
+ParameterList → ParameterListNonEmpty
               | ε
+
+ParameterListNonEmpty → Parameter
+                       | Parameter ',' ParameterListNonEmpty
 
 Parameter → Identifier ':' Type
 
 Assignment → Identifier '=' Expression ';'
 
-IfStatement → 'if' '(' Expression ')' Block ElseClause
+IfStatement → MatchedIf
+             | UnmatchedIf
 
-ElseClause → 'else' Block
-           | ε
+MatchedIf → 'if' '(' Expression ')' Block 'else' Block
 
-LoopStatement → 'while' '(' Expression ')' Block
-              | 'for' '(' Assignment ';' Expression ';' Assignment ')' Block
+UnmatchedIf → 'if' '(' Expression ')' Block
+            | 'if' '(' Expression ')' MatchedIf 'else' UnmatchedIf
 
-FunctionCall → Identifier '(' ArgumentList ')' ';'
-             | Identifier '(' ArgumentList ')'  // Without semicolon when used in expression
+LoopStatement → WhileLoop
+              | ForLoop
 
-ArgumentList → Expression ',' ArgumentList
-            | Expression
-            | ε
+WhileLoop → 'while' '(' Expression ')' Block
+
+ForLoop → 'for' '(' ForAssignment ';' Expression ';' ForAssignment ')' Block
+
+ForAssignment → Identifier '=' Expression
+
+FunctionCallExpr → Identifier '(' ArgumentList ')'
+
+FunctionCallStmt → FunctionCallExpr ';'
+
+ArgumentList → ArgumentListNonEmpty
+             | ε
+
+ArgumentListNonEmpty → Expression
+                      | Expression ',' ArgumentListNonEmpty
 
 PrintStatement → 'print' '(' Expression ')' ';'
 
@@ -71,7 +87,7 @@ Term → Factor
 Factor → Identifier
         | Literal
         | '(' Expression ')'
-        | FunctionCall
+        | FunctionCallExpr
         | UnaryOperator Factor
         | 'NULL'
 
@@ -84,13 +100,15 @@ Literal → IntegerLiteral
 
 ListLiteral → '[' ExpressionList ']'
 
-ExpressionList → Expression ',' ExpressionList
-              | Expression
-              | ε
+ExpressionList → ExpressionListNonEmpty
+               | ε
+
+ExpressionListNonEmpty → Expression
+                        | Expression ',' ExpressionListNonEmpty
 
 ComparativeOperator → '<' | '>' | '<=' | '>=' | '==' | '!='
 
-LogicalOperator → '&&' | '||' | '!'
+LogicalOperator → '&&' | '||'
 
 ArithmeticOperator → '+' | '-' | '*' | '/' | '%'
 
