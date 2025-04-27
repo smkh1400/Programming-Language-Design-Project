@@ -1,21 +1,28 @@
+#------------------------------------------------------------
+# MOHAMMADREZA KHOSRAVIAN
+# SAM KHANAKI
+# ALI SADEGHI
+#
+# GRAMMAR RULES FOR LANGUAGE IMPLEMENTATION
+# SHARIF UNIVERSITY OF TECHNOLOGY - SPRING 2025
+#------------------------------------------------------------
+
 Program → StatementList
 
 StatementList → Statement StatementList
               | ε
 
-Statement → OtherStatement
-           | IfStatement
-
-OtherStatement → VariableDeclaration
-                | FunctionDeclaration
-                | Assignment
-                | LoopStatement
-                | Block
-                | FunctionCallStmt
-                | PrintStatement
-                | ReturnStatement
-                | BreakStatement
-                | ContinueStatement
+Statement → VariableDeclaration
+          | FunctionDeclaration
+          | Assignment
+          | IfStatement
+          | LoopStatement
+          | Block
+          | FunctionCall
+          | PrintStatement
+          | ReturnStatement
+          | BreakStatement
+          | ContinueStatement
 
 BreakStatement → 'break' ';'
 
@@ -26,26 +33,24 @@ Block → '{' StatementList '}'
 VariableDeclaration → 'var' Identifier ':' Type '=' Expression ';'
 
 Type → 'int'
-      | 'float'
-      | 'string'
-      | 'bool'
-      | 'list' '[' Type ']'
-      | 'nulltype'
+     | 'float'
+     | 'string'
+     | 'bool'
+     | 'list' '[' Type ']'
+     | 'nulltype'
 
 FunctionDeclaration → 'func' Identifier '(' ParameterList ')' ':' Type Block
 
-ParameterList → ParameterListNonEmpty
+ParameterList → Parameter ',' ParameterList
+              | Parameter
               | ε
-
-ParameterListNonEmpty → Parameter
-                       | Parameter ',' ParameterListNonEmpty
 
 Parameter → Identifier ':' Type
 
 Assignment → Identifier '=' Expression ';'
 
 IfStatement → MatchedIf
-             | UnmatchedIf
+            | UnmatchedIf
 
 MatchedIf → 'if' '(' Expression ')' Block 'else' Block
 
@@ -61,15 +66,12 @@ ForLoop → 'for' '(' ForAssignment ';' Expression ';' ForAssignment ')' Block
 
 ForAssignment → Identifier '=' Expression
 
-FunctionCallExpr → Identifier '(' ArgumentList ')'
-
-FunctionCallStmt → FunctionCallExpr ';'
-
-ArgumentList → ArgumentListNonEmpty
+ArgumentList → Expression ',' ArgumentList
+             | Expression
              | ε
 
-ArgumentListNonEmpty → Expression
-                      | Expression ',' ArgumentListNonEmpty
+FunctionCall → Identifier '(' ArgumentList ')'
+             | Identifier '(' ArgumentList ')' ';'
 
 PrintStatement → 'print' '(' Expression ')' ';'
 
@@ -82,14 +84,14 @@ SimpleExpression → Term
                  | SimpleExpression LogicalOperator Term
 
 Term → Factor
-      | Term ArithmeticOperator Factor
+     | Term ArithmeticOperator Factor
 
 Factor → Identifier
-        | Literal
-        | '(' Expression ')'
-        | FunctionCallExpr
-        | UnaryOperator Factor
-        | 'NULL'
+       | Literal
+       | '(' Expression ')'
+       | FunctionCall
+       | UnaryOperator Factor
+       | 'NULL'
 
 Literal → IntegerLiteral
         | FloatLiteral
@@ -100,20 +102,25 @@ Literal → IntegerLiteral
 
 ListLiteral → '[' ExpressionList ']'
 
-ExpressionList → ExpressionListNonEmpty
-               | ε
+ExpressionList → Expression ',' ExpressionList
+              | Expression
+              | ε
 
-ExpressionListNonEmpty → Expression
-                        | Expression ',' ExpressionListNonEmpty
+ComparativeOperator → '<'
+                    | '>'
+                    | '<='
+                    | '>='
+                    | '=='
+                    | '!='
 
-ComparativeOperator → '<' | '>' | '<=' | '>=' | '==' | '!='
+LogicalOperator → '&&'
+                | '||'
 
-LogicalOperator → '&&' | '||'
+ArithmeticOperator → '+'
+                   | '-'
+                   | '*'
+                   | '/'
+                   | '%'
 
-ArithmeticOperator → '+' | '-' | '*' | '/' | '%'
-
-UnaryOperator → '-' | '!'
-
-IntegerLiteral → Digit+
-FloatLiteral → Digit+ '.' Digit+
-StringLiteral → '"' (Character)* '"'
+UnaryOperator → '-'
+              | '!'
