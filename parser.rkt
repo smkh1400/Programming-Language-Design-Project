@@ -270,7 +270,7 @@ PARSER
      [(OP Expression CP) $2]
      [(FunctionCallExpr) $1]
      [(UnaryOperator Factor) (list $1 $2)]
-     [(NULL) 'NULL]]
+     [(NULL) $1]]
 
     ;------------------------------------------------------------28
     ;  Literal → IntegerLiteral | FloatLiteral | StringLiteral
@@ -281,8 +281,8 @@ PARSER
      [(FLOAT) $1]
      [(STRING) $1]
      [(ListLiteral) $1]
-     [(TRUE) 'true]
-     [(FALSE) 'false]]
+     [(TRUE) $1]
+     [(FALSE) $1]]
 
     ;------------------------------------------------------------29
     ;  ListLiteral → '[' ExpressionList ']'

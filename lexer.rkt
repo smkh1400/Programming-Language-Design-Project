@@ -83,7 +83,7 @@ LEXER
         ("{" (token-OCB)) ("}" (token-CCB))
 
         ;; Literals (Booleans & NULL)
-        ("true" (token-TRUE)) ("false" (token-FALSE)) ("NULL" (token-NULL))
+        ("true" (token-TRUE #t)) ("false" (token-FALSE #f)) ("NULL" (token-NULL 'null))
 
         ;; Identifiers (Var & Func names)
         ((:+ (:or (char-range #\a #\z) (char-range #\A #\Z) #\_))
@@ -101,3 +101,44 @@ LEXER
   )
 
 (provide (all-defined-out))
+
+(define test-program 
+  "var x: int = 42;
+   func foo(a: int): int {
+     if (a > 0) {
+       return a * 2;
+     } else {
+       return -1;
+     }
+   }
+   print(foo(x));
+   "
+)
+
+(define (string->input-port str)
+  (open-input-string str))
+
+(define (lex-all port)
+  (define token (lexer-full port))
+  (if (eq? (token-name token) 'EOF)
+      (list token)
+      (cons token (lex-all port))))
+
+(define (make-token-generator tokens)
+  (let ([tokens-box (box tokens)])
+    (lambda ()
+      (let ([lst (unbox tokens-box)])
+        (if (null? lst)
+            (error "No more tokens")
+            (begin
+              (set-box! tokens-box (cdr lst))
+              (car lst)))))))
+
+;;; (define (display-tokens tokens)
+;;;   (unless (null? tokens)
+;;;     (let ([token (car tokens)])
+;;;       (printf "~a: ~a\n" 
+;;;               (token-name token) 
+;;;               (or (token-value token) ""))
+;;;     (display-tokens (cdr tokens))))
+;;; )

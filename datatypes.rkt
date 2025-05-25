@@ -1,0 +1,95 @@
+#lang racket
+
+(require (lib "eopl.ss" "eopl"))
+
+(define (report-expval-extractor-error! type) (eopl:error 'invalid-value "invalid value cast to ~s" type))
+
+(define reference?
+    (lambda (var)
+        (integer? var)
+    )
+)
+
+(define-datatype environment environment?
+  (empty-environment)
+  (extend-environment (var string?) (val reference?) (env environment?)))
+
+(define expval->num
+ (lambda (val) (cases expval val
+    (num-val (num) num)
+    (else (report-expval-extractor-error! "number")))))
+
+(define expval->bool
+ (lambda (val) (cases expval val
+    (bool-val (bool) bool)
+    (else (report-expval-extractor-error! "boolean")))))
+
+(define-datatype program program?
+ (a-program (exprs (list-of expression?))))
+
+(define-datatype expression expression?
+ (const-exp (num number?))
+ (bool-exp (b boolean?))
+ (add-exp (exp1 expression?) (exp2 expression?))
+ (sub-exp (exp1 expression?) (exp2 expression?))
+ (mult-exp (exp1 expression?) (exp2 expression?))
+ (div-exp (exp1 expression?) (exp2 expression?))
+ (var-exp (var string?))
+ (assign-exp (var string?) (exp1 expression?))
+ (print-exp (var string?))
+ (greater-exp (exp1 expression?) (exp2 expression?))
+ (greater-equal-exp (exp1 expression?) (exp2 expression?))
+ (less-exp (exp1 expression?) (exp2 expression?))
+ (less-equal-exp (exp1 expression?) (exp2 expression?))
+ (equal-exp (exp1 expression?) (exp2 expression?))
+ (not-equal-exp (exp1 expression?) (exp2 expression?))
+ (and-exp (exp1 expression?) (exp2 expression?))
+ (or-exp (exp1 expression?) (exp2 expression?))
+ (not-exp (exp1 expression?))
+;;;  (zero?-exp (expr expression?))
+;;;  (if-exp (exp1 expression?) (exp2 expression?) (exp3 expression?))
+;;;  (let-exp (var string?) (expr expression?) (body expression?))
+;;;  (proc-exp (var string?) (body expression?))
+;;;  (call-exp (rator expression?) (rand expression?))
+;;;  (newref-exp (expr expression?))
+;;;  (deref-exp (expr expression?))
+;;;  (setref-exp (exp1 expression?) (exp2 expression?))
+;;;  (pair-exp (exp1 expression?) (exp2 expression?))
+;;;  (sum-pair-exp (exp expression?))
+;;;  (swap-exp (var1 string?) (var2 string?))
+;;;  (repeat-exp (body expression?) (var string?) (start expression?) (end expression?))
+;;;  (arr-exp (name string?) (arr-length expression?) (default-length expression?))
+;;;  (index-exp (arr expression?) (index expression?)))
+)
+
+(define-datatype expval expval?
+ (num-val (num number?))
+ (bool-val (bool boolean?)))
+
+(define num-val?
+    (lambda (val)
+        (cases expval val
+        (num-val (num)
+            #t
+        )
+        (else
+            #f
+        )
+        )
+    )
+)
+
+(define bool-val?
+    (lambda (val)
+        (cases expval val
+        (bool-val (num)
+            #t
+        )
+        (else
+            #f
+        )
+        )
+    )
+)
+
+(provide (all-defined-out))
