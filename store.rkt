@@ -1,7 +1,6 @@
 #lang racket
 
 (require "datatypes.rkt")
-;;; (require (lib "eopl.ss" "eopl"))
 (require (only-in (lib "eopl.ss" "eopl") eopl:error cases))
 
 (define (report-invalid-reference) (eopl:error 'invalid-reference "\n\tillegal reference to memory!"))

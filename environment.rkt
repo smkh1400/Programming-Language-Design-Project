@@ -3,8 +3,6 @@
 (require "datatypes.rkt")
 (require (only-in (lib "eopl.ss" "eopl") eopl:error cases))
 
-;;; (define (report-no-binding-found! var) (eopl:error 'binding-dismatch "\n\tidentifier ~s is used before its declaration!" var))
-
 (define the-env 'uninitialized)
 
 (define initialize-env! (lambda () (set! the-env (init-env))))

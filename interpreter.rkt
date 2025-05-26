@@ -1,9 +1,9 @@
 #lang racket
 
 
+(require (lib "eopl.ss" "eopl"))
 (require "lexer.rkt")
 (require "parser.rkt")
-(require (lib "eopl.ss" "eopl"))
 (require "datatypes.rkt")
 (require "environment.rkt")
 (require "store.rkt")
