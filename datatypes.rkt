@@ -24,6 +24,11 @@
     (bool-val (bool) bool)
     (else (report-expval-extractor-error! "boolean")))))
 
+(define expval->list
+  (lambda (val) (cases expval val
+    (list-val (vals) vals)
+    (else (report-expval-extractor-error! "list")))))
+
 (define-datatype program program?
  (a-program (exprs (list-of expression?))))
 
@@ -46,6 +51,8 @@
  (and-exp (exp1 expression?) (exp2 expression?))
  (or-exp (exp1 expression?) (exp2 expression?))
  (not-exp (exp1 expression?))
+ (list-exp (elements (list-of expression?)))
+ (index-exp (var string?) (exp1 expression?))
 ;;;  (zero?-exp (expr expression?))
 ;;;  (if-exp (exp1 expression?) (exp2 expression?) (exp3 expression?))
 ;;;  (let-exp (var string?) (expr expression?) (body expression?))
@@ -64,7 +71,8 @@
 
 (define-datatype expval expval?
  (num-val (num number?))
- (bool-val (bool boolean?)))
+ (bool-val (bool boolean?))
+ (list-val (vals (list-of expval?))))
 
 (define num-val?
     (lambda (val)

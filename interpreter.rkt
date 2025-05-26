@@ -15,7 +15,7 @@
             ((list 'Program decls)
             (a-program (map parse-tree->ast decls)))
 
-            ((list 'VarDecl var (list 'Type _) expr)
+            ((list 'VarDecl var type expr)
             (assign-exp var (parse-tree->ast expr)))
 
             ((list "+" left right)
@@ -71,6 +71,12 @@
 
             ((? boolean? b)
             (bool-exp b))
+
+            ((list 'List elements)
+            (list-exp (map parse-tree->ast elements)))
+
+            ((list 'Index var index)
+            (index-exp var (parse-tree->ast index)))
 
             (else
             (error "Unknown parse tree node:" node))
@@ -237,6 +243,23 @@
             )
             (var-exp (var)
                 (deref (apply-env var (get-env)))
+            )
+            (list-exp (exprs)
+                (let
+                    (
+                        (vals (map (lambda (e) (value-of e)) exprs))
+                    )
+                    (list-val vals)
+                )
+            )
+            (index-exp (var exp1)
+                (let
+                    (
+                        (array-val (expval->list (deref (apply-env var (get-env)))))
+                        (idx (expval->num (value-of exp1)))
+                    )
+                    (list-ref array-val idx)
+                )
             )
             (assign-exp (var exp1)
                 (let

@@ -136,7 +136,9 @@ PARSER
     ;------------------------------------------------------------
     [Assignment
      [(ID ASSIGNMENT Expression SEMICOLON)
-      (list 'Assign $1 $3)]]
+      (list 'Assign $1 $3)]
+     [(ID OB Expression CB ASSIGNMENT Expression SEMICOLON)
+      (list 'AssignIndex $1 $3 $6)]]
 
     ;------------------------------------------------------------13
     ;  IfStatement → MatchedIf | UnmatchedIf
@@ -258,19 +260,31 @@ PARSER
 
     ;------------------------------------------------------------27
     ;  Factor → Identifier
-    ;              | Literal
-    ;              | '(' Expression ')'
-    ;              | FunctionCallExpr
-    ;              | UnaryOperator Factor
-    ;              | 'NULL'
+    ;     | Identifier '[' Expression ']'
+    ;     | Literal
+    ;     | '(' Expression ')'
+    ;     | FunctionCall
+    ;     | UnaryOperator Factor
+    ;     | 'NULL'
     ;------------------------------------------------------------
+    [Indexing
+     [(OB Expression CB) (list $2)]]
+
+    [OptionalIndexing
+     [() '()] ; empty
+     [(Indexing) $1]] ; presence of indexing
+
     [Factor
-     [(ID) $1]
+     [(ID OptionalIndexing) 
+      (if (null? $2)
+          $1
+          (list 'Index $1 (car $2)))]
      [(Literal) $1]
      [(OP Expression CP) $2]
      [(FunctionCallExpr) $1]
      [(UnaryOperator Factor) (list $1 $2)]
      [(NULL) $1]]
+
 
     ;------------------------------------------------------------28
     ;  Literal → IntegerLiteral | FloatLiteral | StringLiteral

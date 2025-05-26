@@ -102,19 +102,6 @@ LEXER
 
 (provide (all-defined-out))
 
-(define test-program 
-  "var x: int = 42;
-   func foo(a: int): int {
-     if (a > 0) {
-       return a * 2;
-     } else {
-       return -1;
-     }
-   }
-   print(foo(x));
-   "
-)
-
 (define (string->input-port str)
   (open-input-string str))
 
