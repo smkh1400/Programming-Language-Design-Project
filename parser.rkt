@@ -293,7 +293,7 @@ PARSER
     [Literal
      [(INT) $1]
      [(FLOAT) $1]
-     [(STRING) $1]
+     [(STRING) (list 'StringLiteral $1)]
      [(ListLiteral) $1]
      [(TRUE) $1]
      [(FALSE) $1]]

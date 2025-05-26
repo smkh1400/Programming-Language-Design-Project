@@ -72,6 +72,9 @@
             ((? boolean? b)
             (bool-exp b))
 
+            ((list 'StringLiteral s)
+            (string-exp s))
+
             ((list 'List elements)
             (list-exp (map parse-tree->ast elements)))
 
@@ -133,6 +136,9 @@
             )
             (bool-exp (b)
                 (bool-val b)
+            )
+            (string-exp (s)
+                (string-val s)
             )
             (add-exp (exp1 exp2)
                 (num-val
@@ -286,6 +292,7 @@
                     (cond
                         ((num-val? val) (displayln (expval->num val)))
                         ((bool-val? val) (displayln (expval->bool val)))
+                        ((string-val? val) (displayln (expval->string val)))
                         (else (error "Unkown value type in print" val))
                     )
                 )
