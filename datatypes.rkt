@@ -59,6 +59,8 @@
  (not-exp (exp1 expression?))
  (list-exp (elements (list-of expression?)))
  (index-exp (var string?) (exp1 expression?))
+ (if-exp (condition expression?) (then-branch expression?) (else-branch (maybe expression?)))
+ (block-exp (exprs (list-of expression?)))
 )
 
 (define-datatype expval expval?

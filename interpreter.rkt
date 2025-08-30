@@ -81,6 +81,18 @@
             ((list 'Index var index)
             (index-exp var (parse-tree->ast index)))
 
+            ((list 'If condition then-branch else-branch)
+                (if-exp (parse-tree->ast condition) 
+                (parse-tree->ast then-branch)
+                (if (equal? else-branch 'None)
+                    'None
+                    (parse-tree->ast else-branch))
+                )
+            )
+
+            ((list 'Block exprs)
+            (block-exp (map parse-tree->ast exprs)))
+
             (else
             (error "Unknown parse tree node:" node))
         )
@@ -296,6 +308,18 @@
                         (else (error "Unkown value type in print" val))
                     )
                 )
+            )
+            (if-exp (condition then-branch else-branch)
+                (if (expval->bool (value-of condition))
+                    (value-of then-branch)
+                    (if else-branch
+                        (value-of else-branch)
+                        '()
+                    )
+                )
+            )
+            (block-exp (exprs)
+                (value-of-sequence exprs)
             )
         )
     )
