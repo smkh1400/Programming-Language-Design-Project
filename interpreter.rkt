@@ -143,15 +143,34 @@
     )
 )
 
+;;; (define value-of-sequence
+;;;     (lambda (exprs)
+;;;         (cond
+;;;             ((null? exprs) (eopl:error 'value-of-sequence "Empty program"))
+;;;             ((null? (cdr exprs)) (value-of (car exprs)))
+;;;             (else
+;;;                 (begin
+;;;                     (value-of (car exprs))
+;;;                     (value-of-sequence (cdr exprs))
+;;;                 )
+;;;             )
+;;;         )
+;;;     )
+;;; )
+
 (define value-of-sequence
     (lambda (exprs)
         (cond
             ((null? exprs) (eopl:error 'value-of-sequence "Empty program"))
-            ((null? (cdr exprs)) (value-of (car exprs)))
-            (else
-                (begin
-                    (value-of (car exprs))
-                    (value-of-sequence (cdr exprs))
+            (else 
+                (let ((res (value-of (car exprs))))
+                    (if (return-signal? res)
+                        res
+                        (if (null? (cdr exprs))
+                            res
+                            (value-of-sequence (cdr exprs))
+                        )
+                    )
                 )
             )
         )
@@ -394,7 +413,10 @@
                                         (set-env! new-env)
                                         (let ((result (value-of body)))
                                             (set-env! old-env)
-                                            result
+                                            (if (return-signal? result)
+                                                (return-signal-value result)
+                                                result
+                                            )
                                         )
                                     )
                                 )

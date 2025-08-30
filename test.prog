@@ -1,7 +1,12 @@
-func greet(x: int): int {
-    x = x + 1;
-    print(x);
+func foo(x: int, z: int): int {
+    if (x > z) {
+        return x;
+    } else {
+        return z;
+    }
 }
 
-var x: int = 1;
-greet(x);
+var x: int = 5;
+var z: int = 3;
+var y: int = foo(x, z);
+print(y);
