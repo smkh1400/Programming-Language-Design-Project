@@ -93,6 +93,9 @@
             ((list 'Block exprs)
             (block-exp (map parse-tree->ast exprs)))
 
+            ((list 'While condition body)
+            (while-exp (parse-tree->ast condition) (parse-tree->ast body)))
+
             (else
             (error "Unknown parse tree node:" node))
         )
@@ -320,6 +323,14 @@
             )
             (block-exp (exprs)
                 (value-of-sequence exprs)
+            )
+            (while-exp (condition body)
+                (let loop ()
+                    (when (expval->bool (value-of condition))
+                        (value-of body)
+                        (loop)
+                    )
+                )
             )
         )
     )
