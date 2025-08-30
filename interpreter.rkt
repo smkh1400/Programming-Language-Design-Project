@@ -85,7 +85,7 @@
                 (if-exp (parse-tree->ast condition) 
                 (parse-tree->ast then-branch)
                 (if (equal? else-branch 'None)
-                    'None
+                    (empty-exp)
                     (parse-tree->ast else-branch))
                 )
             )
@@ -345,6 +345,7 @@
                     )
                 )
             )
+            (empty-exp (void))
         )
     )
 )

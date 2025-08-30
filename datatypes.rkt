@@ -63,6 +63,7 @@
  (block-exp (exprs (list-of expression?)))
  (while-exp (condition expression?) (body expression?))
  (for-exp (init expression?) (condition expression?) (update expression?) (body expression?))
+ (empty-exp)
 )
 
 (define-datatype expval expval?
