@@ -63,6 +63,10 @@
  (block-exp (exprs (list-of expression?)))
  (while-exp (condition expression?) (body expression?))
  (for-exp (init expression?) (condition expression?) (update expression?) (body expression?))
+ (func-exp (name string?) (params (list-of expression?)) (body expression?))
+ (call-exp (name string?) (args (list-of expression?)))
+ (param-exp (name string?) (type string?))
+ (return-exp (exp expression?))
  (empty-exp)
 )
 
@@ -70,7 +74,9 @@
  (num-val (num number?))
  (bool-val (bool boolean?))
  (list-val (vals (list-of expval?)))
- (string-val (string string?)))
+ (string-val (string string?))
+ (closure-val (params (list-of string?)) (body expression?) (env environment?))
+ )
 
 (define num-val?
     (lambda (val)

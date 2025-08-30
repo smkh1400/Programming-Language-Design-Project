@@ -99,6 +99,18 @@
             ((list 'For init condition update body)
             (for-exp (parse-tree->ast init) (parse-tree->ast condition) (parse-tree->ast update) (parse-tree->ast body)))
 
+            ((list 'FuncDecl name params return-type body)
+            (func-exp name (map parse-tree->ast params) (parse-tree->ast body)))
+
+            ((list 'Call name args)
+            (call-exp name (map parse-tree->ast args)))
+
+            ((list 'Param name (list 'Type type-str))
+            (param-exp name type-str))
+
+            ((list 'Return expr)
+            (return-exp (parse-tree->ast expr)))
+
             (else
             (error "Unknown parse tree node:" node))
         )
@@ -145,6 +157,8 @@
         )
     )
 )
+
+(struct return-signal (value))
 
 (define value-of
     (lambda (exp)
@@ -344,6 +358,56 @@
                         (loop)
                     )
                 )
+            )
+            (func-exp (name params body)
+                (let 
+                    (
+                        (param-names 
+                            (map 
+                                (lambda (p)
+                                    (cases expression p
+                                        (param-exp (n t) 
+                                            n
+                                        )
+                                        (else (error "Expected a param-exp" p))
+                                    )
+                                )
+                                params
+                            )
+                        )
+                    )
+                    (let ((closure (closure-val param-names body (get-env))))
+                        (set-env! (extend-env name (newref closure) (get-env)))
+                    )
+                )
+            )
+            (call-exp (name args)
+                (let ((closure (deref (apply-env name (get-env)))))
+                    (cases expval closure
+                        (closure-val (param-names body closure-env)
+                            (let ((arg-values (map value-of args)))
+                                (let ((new-env (foldl (lambda (pair env)
+                                    (extend-env (car pair) (newref (cdr pair)) env))
+                                    closure-env
+                                    (map cons param-names arg-values))))
+                                    (let ((old-env (get-env)))
+                                        (set-env! new-env)
+                                        (let ((result (value-of body)))
+                                            (set-env! old-env)
+                                            result
+                                        )
+                                    )
+                                )
+                            )
+                        )
+                        (else
+                            (error "Expected a function closure" closure)
+                        )
+                    )
+                )
+            )
+            (return-exp (exp)
+                (return-signal (value-of exp))
             )
             (empty-exp (void))
         )
