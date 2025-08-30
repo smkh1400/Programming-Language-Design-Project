@@ -96,6 +96,9 @@
             ((list 'While condition body)
             (while-exp (parse-tree->ast condition) (parse-tree->ast body)))
 
+            ((list 'For init condition update body)
+            (for-exp (parse-tree->ast init) (parse-tree->ast condition) (parse-tree->ast update) (parse-tree->ast body)))
+
             (else
             (error "Unknown parse tree node:" node))
         )
@@ -328,6 +331,16 @@
                 (let loop ()
                     (when (expval->bool (value-of condition))
                         (value-of body)
+                        (loop)
+                    )
+                )
+            )
+            (for-exp (init condition update body)
+                (value-of init)
+                (let loop ()
+                    (when (expval->bool (value-of condition))
+                        (value-of body)
+                        (value-of update)
                         (loop)
                     )
                 )

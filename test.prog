@@ -1,7 +1,6 @@
 var i: int = 0;
-var max: int = 5;
+var max: int = 500;
 
-while (i < max) {
+for (i = 1; i < max; i = i * 2) {
     print(i);
-    i = i + 2;
 }
