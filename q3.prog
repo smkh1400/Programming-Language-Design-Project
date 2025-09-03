@@ -1,0 +1,157 @@
+var board: list[list[string]] = [
+    ["-", "X", "-", "-", "X", "O"],
+    ["O", "O", "X", "-", "-", "O"],
+    ["-", "-", "X", "X", "-", "O"],
+    ["-", "X", "X", "O", "X", "O"],
+    ["O", "O", "-", "-", "X", "-"],
+    ["-", "-", "-", "-", "-", "-"]
+];
+
+var xWon: bool = false;
+var oWon: bool = false;
+
+var i: int = 0;
+var j: int = 0;
+
+i = 0;
+
+while (i < 6) {
+    j = 0;
+    var row: list[string] = board[i];
+    while (j <= 2) {
+        var allX: bool = true;
+        var allO: bool = true;
+        var k: int = 0;
+        while (k < 4) {
+            var t: int = j + k;
+            var cell: string = row[t];
+            if (cell != "X") {
+                allX = false;
+            }
+            if (cell != "O") {
+                allO = false;
+            }
+            k = k + 1;
+        }
+        if (allX) {
+            xWon = true;
+        }
+        if (allO) {
+            oWon = true;
+        }
+        j = j + 1;
+    }
+    i = i + 1;
+}
+
+j = 0;
+while (j < 6) {
+    i = 0;
+    while (i <= 2) {
+        var allX: bool = true;
+        var allO: bool = true;
+        var k: int = 0;
+        while (k < 4) {
+            var t: int = i + k;
+            var row: list[string] = board[t];
+            var cell: string = row[j];
+            if (cell != "X") {
+                allX = false;
+            }
+            if (cell != "O") {
+                allO = false;
+            }
+            k = k + 1;
+        }
+        if (allX) {
+            xWon = true;
+        }
+        if (allO) {
+            oWon = true;
+        }
+        i = i + 1;
+    }
+    j = j + 1;
+}
+
+i = 0;
+while (i <= 2) {
+    j = 0;
+    while (j <= 2) {
+        var allX: bool = true;
+        var allO: bool = true;
+        var k: int = 0;
+        while (k < 4) {
+            var t: int = (i + k);
+            var p: int = (j + k);
+            var row: list[string] = board[t];
+            var cell: string = row[p];
+            if (cell != "X") {
+                allX = false;
+            }
+            if (cell != "O") {
+                allO = false;
+            }
+            k = k + 1;
+        }
+        if (allX) {
+            xWon = true;
+        }
+        if (allO) {
+            oWon = true;
+        }
+        j = j + 1;
+    }
+    i = i + 1;
+}
+
+
+i = 0;
+while (i <= 2) {
+    j = 3;
+    while (j < 6) {
+        var allX: bool = true;
+        var allO: bool = true;
+        var k: int = 0;
+        while (k < 4) {
+            var t: int = i + k;
+            var p: int = j - k;
+            var row: list[string] = board[t];
+            var cell: string = row[p];
+            if (cell != "X") {
+                allX = false;
+            }
+            if (cell != "O") {
+                allO = false;
+            }
+            k = k + 1;
+        }
+        if (allX) {
+            xWon = true;
+        }
+        if (allO) {
+            oWon = true;
+        }
+        j = j + 1;
+    }
+    i = i + 1;
+}
+
+var cheat: string = "Somebody Cheated!";
+var xwin: string = "X wins!";
+var owin: string = "O wins!";
+var draw: string = "Draw!";
+
+if (xWon && oWon) {
+    print(cheat);
+} else  {
+    if (xWon) {
+        print(xwin);
+    } else {
+        if (oWon) {
+            print(owin);
+        } else {
+            print(draw);
+        }
+    }
+}
