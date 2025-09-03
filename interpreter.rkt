@@ -30,6 +30,9 @@
             ((list "/" left right)
             (div-exp (parse-tree->ast left) (parse-tree->ast right)))
 
+            ((list "%" left right)
+            (modulo-exp (parse-tree->ast left) (parse-tree->ast right)))
+
             ((list ">" left right)
             (greater-exp (parse-tree->ast left) (parse-tree->ast right)))
 
@@ -56,6 +59,9 @@
 
             ((list "!" exp)
             (not-exp (parse-tree->ast exp)))
+
+            ((list "-" exp)
+            (minus-exp (parse-tree->ast exp)))
 
             ((list 'Assign var expr)
             (assign-exp var (parse-tree->ast expr)))
@@ -117,7 +123,7 @@
     )
 )
 
-(define input-program (open-input-file "test.prog"))
+(define input-program (open-input-file "q1.prog"))
 (define tokens (lex-all input-program))
 (define token-generator (make-token-generator tokens))
 (define parse-result (parse-full token-generator))
@@ -217,11 +223,17 @@
             )
             (div-exp (exp1 exp2)
                 (num-val
-                    (exact->inexact
-                        (/
-                            (expval->num (value-of exp1))
-                            (expval->num (value-of exp2))
-                        )
+                    (quotient
+                        (expval->num (value-of exp1))
+                        (expval->num (value-of exp2))
+                    )
+                )
+            )
+            (modulo-exp (exp1 exp2)
+                (num-val
+                    (modulo
+                        (expval->num (value-of exp1))
+                        (expval->num (value-of exp2))
                     )
                 )
             )
@@ -298,6 +310,11 @@
                     )
                 )
             )
+            (minus-exp (exp1)
+                (num-val
+                    (- (expval->num (value-of exp1)))
+                )
+            )
             (var-exp (var)
                 (deref (apply-env var (get-env)))
             )
@@ -353,7 +370,7 @@
                     (value-of then-branch)
                     (if else-branch
                         (value-of else-branch)
-                        '()
+                        (empty-exp)
                     )
                 )
             )

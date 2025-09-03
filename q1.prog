@@ -1,0 +1,17 @@
+var x: int = 123450;
+
+var error: string = "you should provide a non-negative number!";
+
+if (x < 0) {
+    print(error);
+} else {
+    var z: int = 0;
+    while (x != 0) {
+        var t: int = (x % 10);
+        z = z * 10;
+        z = z + t;
+        x = x / 10;
+    }
+
+    print(z);
+}
