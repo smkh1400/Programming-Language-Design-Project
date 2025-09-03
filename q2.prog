@@ -1,0 +1,66 @@
+var firstList: list[int] = [7, 11, 20, 16, 14, 1];
+var secondList: list[string] = ["111", "10000", "10001001", "1011", "1100", "0"];
+
+func stringToInt(s : string) : int {
+    var emptyString: string = "";
+    
+    var index: int = 0;
+    var stringIndex: string = s[index];
+    var result: int = 0;
+    while (stringIndex != emptyString) {
+        result = result * 2;
+        if (stringIndex == "1") {
+            result = result + 1;
+        }
+        index = index + 1;
+        stringIndex = s[index];
+    }
+    return result;
+}
+
+var i: int = 0;
+var listIndex: string = secondList[i];
+var emptyList: list[string] = "";
+while (listIndex != emptyList) {
+    var temp: int = stringToInt(listIndex);
+    secondList[i] = temp;
+    i = i + 1;
+    listIndex = secondList[i];
+}
+
+i = 0;
+listIndex = secondList[i];
+
+var multEven: int = 1;
+var multOdd: int = 1;
+
+
+while (listIndex != emptyList) {
+    var isInFirstList: bool = false;
+
+    var j: int = 0;
+    var firstListIndex: int = firstList[j];
+    while (firstListIndex != emptyList) {
+        if (listIndex == firstListIndex) {
+            isInFirstList = true;
+        }
+        j = j + 1;
+        firstListIndex = firstList[j];
+    }
+
+    if (isInFirstList) {
+        var m: int = (listIndex % 2);
+        if (m == 0) {
+            multEven = multEven * listIndex;
+        } else {
+            multOdd = multOdd * listIndex;
+        }
+    }
+
+    i = i + 1;
+    listIndex = secondList[i];    
+}
+
+var result: int = multOdd + multEven;
+
+print(result);

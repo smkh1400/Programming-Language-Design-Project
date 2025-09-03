@@ -8,6 +8,40 @@
 (require "environment.rkt")
 (require "store.rkt")
 
+(define custom-string-ref
+    (lambda (str index)
+        (if 
+            (or 
+                (< index 0) 
+                (>= index (string-length str)))
+            ""
+            (string (string-ref str index)))))
+
+(define custom-list-ref
+    (lambda (lst index)
+        (if 
+            (or 
+                (< index 0) 
+                (>= index (length lst)))
+            (string-val "")
+            (list-ref lst index))))
+
+(define custom-string-set!
+  (lambda (str index char-val)
+    (if (or (< index 0) (>= index (string-length str)))
+        str  ; Return original string if out of bounds
+        (let ([new-str (string-copy str)])
+          (string-set! new-str index char-val)
+          new-str))))
+
+(define custom-list-set!
+  (lambda (lst index value)
+    (if (or (< index 0) (>= index (length lst)))
+        lst  ; Return original list if out of bounds
+        (append (take lst index)      ; elements before index
+                (list value)          ; new value
+                (drop lst (+ index 1))))))  ; elements after index
+
 
 (define parse-tree->ast 
     (lambda (node)
@@ -66,6 +100,9 @@
             ((list 'Assign var expr)
             (assign-exp var (parse-tree->ast expr)))
 
+            ((list 'AssignIndex var index expr)
+            (assign-index-exp var (parse-tree->ast index) (parse-tree->ast expr)))
+
             ((list 'Print var)
             (print-exp var))
 
@@ -123,7 +160,7 @@
     )
 )
 
-(define input-program (open-input-file "q1.prog"))
+(define input-program (open-input-file "q2.prog"))
 (define tokens (lex-all input-program))
 (define token-generator (make-token-generator tokens))
 (define parse-result (parse-full token-generator))
@@ -271,18 +308,58 @@
             )
             (equal-exp (exp1 exp2)
                 (bool-val
-                    (equal?
-                        (expval->num (value-of exp1))
-                        (expval->num (value-of exp2))
+                    (let
+                        (
+                            (val1 (value-of exp1))
+                            (val2 (value-of exp2))
+                        )
+                        (cond
+                            ((and (num-val? val1) (num-val? val2)) 
+                                (equal?
+                                    (expval->num val1)
+                                    (expval->num val2)
+                                )
+                            )
+                            ((and (string-val? val1) (string-val? val2))
+                                (equal?
+                                    (expval->string val1)
+                                    (expval->string val2)
+                                )
+                            )
+                            (else
+                                #f
+                            )
+                        )
                     )
                 )
             )
             (not-equal-exp (exp1 exp2)
                 (bool-val
-                    (not
-                        (equal?
-                            (expval->num (value-of exp1))
-                            (expval->num (value-of exp2))
+                    (let
+                        (
+                            (val1 (value-of exp1))
+                            (val2 (value-of exp2))
+                        )
+                        (cond
+                            ((and (num-val? val1) (num-val? val2)) 
+                                (not
+                                    (equal?
+                                        (expval->num val1)
+                                        (expval->num val2)
+                                    )
+                                )
+                            )
+                            ((and (string-val? val1) (string-val? val2))
+                                (not
+                                    (equal?
+                                        (expval->string val1)
+                                        (expval->string val2)
+                                    )
+                                )
+                            )
+                            (else
+                                #t
+                            )
                         )
                     )
                 )
@@ -329,10 +406,14 @@
             (index-exp (var exp1)
                 (let
                     (
-                        (array-val (expval->list (deref (apply-env var (get-env)))))
+                        (val (deref (apply-env var (get-env))))
                         (idx (expval->num (value-of exp1)))
                     )
-                    (list-ref array-val idx)
+                    (cond
+                        ((string-val? val) (string-val (custom-string-ref (expval->string val) idx)))
+                        ((list-val? val) (custom-list-ref (expval->list val) idx))
+                        (else (error "Unknown value type in index-exp" val))
+                    )
                 )
             )
             (assign-exp (var exp1)
@@ -352,6 +433,44 @@
                     )
                 )
             )
+            (assign-index-exp (var index-exp value-exp)
+                (let* 
+                    (
+                        (ref (apply-env var (get-env)))
+                        (current-val (deref ref))
+                        (index (expval->num (value-of index-exp)))
+                        (value (value-of value-exp))
+                    )
+                    (if ref
+                        (cond
+                        ; String case
+                            [(string-val? current-val)
+                                (let* ([str (expval->string current-val)]
+                                        [replacement-char (if (string-val? value)
+                                                            (if (> (string-length (expval->string value)) 0)
+                                                                (string-ref (expval->string value) 0)
+                                                                #\space)  ; Default character if empty
+                                                            (string-ref (string value) 0))])  ; Convert and take first char
+                                (let ([new-str (custom-string-set! str index replacement-char)])
+                                    (setref! ref (string-val new-str))))]
+                        
+                        ; List case
+                            ((list-val? current-val)
+                                (let* 
+                                    (
+                                        (lst (expval->list current-val))
+                                        (new-list (custom-list-set! lst index value))
+                                    )
+                                    (setref! ref (list-val new-list))
+                                )
+                            )
+                        
+                            (else (error "Variable is not a string or list"))
+                        )
+                        (error "Undefined variable")
+                    )
+                )
+            )
             (print-exp (var)
                 (let
                     (
@@ -361,7 +480,7 @@
                         ((num-val? val) (displayln (expval->num val)))
                         ((bool-val? val) (displayln (expval->bool val)))
                         ((string-val? val) (displayln (expval->string val)))
-                        (else (error "Unkown value type in print" val))
+                        (else (error "Unknown value type in print" val))
                     )
                 )
             )

@@ -48,6 +48,7 @@
  (modulo-exp (exp1 expression?) (exp2 expression?))
  (var-exp (var string?))
  (assign-exp (var string?) (exp1 expression?))
+ (assign-index-exp (var string?) (index expression?) (expr expression?))
  (print-exp (var string?))
  (greater-exp (exp1 expression?) (exp2 expression?))
  (greater-equal-exp (exp1 expression?) (exp2 expression?))
@@ -115,6 +116,19 @@
         (else
             #f
         )
+        )
+    )
+)
+
+(define list-val?
+    (lambda (val)
+        (cases expval val
+            (list-val (vals)
+                #t
+            )
+            (else
+                #f
+            )
         )
     )
 )
