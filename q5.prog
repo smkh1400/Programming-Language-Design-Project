@@ -199,14 +199,17 @@ func find_bm_id(): int {
     return bm_index;
 }
 
+func print_bm(): nulltype {
+    var id: int = find_bm_id();
+    var bm: list[string] = students[id];
+    var bm_first_name: string = bm[FIRST_NAME];
+    var bm_last_name: string = bm[LAST_NAME];
+
+    print(bm_first_name);
+    print(bm_last_name);
+}
 
 set_std_cnt();
 sort_students();
 find_student_metrics();
-var id: int = find_bm_id();
-var bm: list[string] = students[id];
-var bm_first_name: string = bm[FIRST_NAME];
-var bm_last_name: string = bm[LAST_NAME];
-
-print(bm_first_name);
-print(bm_last_name);
+print_bm();
