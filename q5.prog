@@ -1,5 +1,5 @@
-var students: list[string] = [
-    ["99111111", "person0", "test0", "18", 4"03111111"],
+var students: list[list[string]] = [
+    ["99111111", "person0", "test0", "18", "403111111"],
     ["400111111", "person1", "test1", "18", "401111111"],
     ["400222222", "person2", "test2", "19", "402222222"],
     ["401111111", "person3", "test3", "16", "402111111"],
@@ -7,18 +7,43 @@ var students: list[string] = [
     ["402222222", "person5", "test5", "17", "null"],
     ["403111111", "person6", "test6", "14", "null"]
 ];
+var query_year: string = "400";
 
-func length(lst: list): int {
-    var i: int = 0;
-    var count: int = 0;
-    while (i != null && i < lst) {
-        count = count + 1;
-        i = i + 1;
-    }
-    return count;
+var CODE: int = 0;
+var FIRST_NAME: int = 1;
+var LAST_NAME: int = 2;
+var SCORE: int = 3;
+var MENTEE: int = 4;
+
+var i: int = 0;
+var j: int = 0;
+var std_cnt: int = 0;
+
+var std: list[string] = [];
+
+std = students[std_cnt];
+while (std != "") {
+    std_cnt = std_cnt + 1;
+    std = students[std_cnt];
 }
 
-func charToInt(s : string) : int {
+func get_year (std_code: string): string {
+    var year_new: string = "000";
+    var year_old: string = "00";
+
+    if (std_code[0] == "9") {
+        year_old[0] = std_code[0];
+        year_old[1] = std_code[1];
+        return year_old;
+    } else {
+        year_new[0] = std_code[0];
+        year_new[1] = std_code[1];
+        year_new[2] = std_code[2];
+        return year_new;
+    }
+}
+
+func char_to_int(s: string): int {
     if (s == "0") {
         return 0;
     } else {
@@ -62,76 +87,43 @@ func charToInt(s : string) : int {
     }
 }
 
-func stringToInt(s: string) : int {
-    var emptyString: string = "";
-    
+func string_to_int(s: string) : int {
     var index: int = 0;
     var digit: int = 0;
-    var digitChar: string = s[index];
+    var digit_char: string = s[index];
 
     var result: int = 0;
-    while (digitChar != emptyString) {
-        digit = charToInt(digitChar);
+    while (digit_char != "") {
+        digit = char_to_int(digit_char);
         result = result * 10;
         result = result + digit;
 
         index = index + 1;
-        digitChar = s[index];
+        digit_char = s[index];
     }
     return result;
 }
 
-func avg_gpa(mentor_id: int): int {
-    var sum: int = 0;
-    var count: int = 0;
-
-    var i: int = 0;
-    while (i < length(students)) {
-        var s: list = students[i];
-        var m: int = s[4];
-
-        if (m == mentor_id) {
-            sum = sum + s[3];
-            count = count + 1;
-
-            var sub_sum: int = avg_gpa(s[0]);
-            sum = sum + sub_sum;
+func find_student(std_code: string): int {
+    i = 0;
+    var result : int = -1;
+    while (i < std_cnt) {
+        std = students[i];
+        if (std_code == std[CODE]) {
+            result = i;
         }
-
         i = i + 1;
     }
-
-    if (count == 0) {
-        return 0;
-    } else {
-        return (sum / count);
-    }
+    return result;
 }
 
-var best_id: int = 0;
-var best_avg: int = 0;
+var id : int = 0;
+var cd : string = "400222222";
+id = find_student(cd);
+print(id);
 
-var i: int = 0;
-while (i < length(students)) {
-    var s: list = students[i];
-    var mentor_id: int = s[0];
-
-    var avg: int = avg_gpa(mentor_id);
-
-    if (avg > best_avg) {
-        best_avg = avg;
-        best_id = mentor_id;
-    }
-
-    i = i + 1;
-}
-
-i = 0;
-while (i < length(students)) {
-    var s: list = students[i];
-    if (s[0] == best_id) {
-        print(s[1]);
-        print(s[2]);
-    }
-    i = i + 1;
+i = std_cnt - 1;
+while (i >= 0) {
+    std = students[i];
+    i = i - 1;
 }

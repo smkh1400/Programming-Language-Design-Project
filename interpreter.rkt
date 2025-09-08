@@ -160,7 +160,7 @@
     )
 )
 
-(define input-program (open-input-file "q4.prog"))
+(define input-program (open-input-file "q5.prog"))
 (define tokens (lex-all input-program))
 (define token-generator (make-token-generator tokens))
 (define parse-result (parse-full token-generator))
