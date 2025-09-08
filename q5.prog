@@ -1,3 +1,13 @@
+var students: list[string] = [
+    ["99111111", "person0", "test0", "18", 4"03111111"],
+    ["400111111", "person1", "test1", "18", "401111111"],
+    ["400222222", "person2", "test2", "19", "402222222"],
+    ["401111111", "person3", "test3", "16", "402111111"],
+    ["402111111", "person4", "test4", "19", "null"],
+    ["402222222", "person5", "test5", "17", "null"],
+    ["403111111", "person6", "test6", "14", "null"]
+];
+
 func length(lst: list): int {
     var i: int = 0;
     var count: int = 0;
@@ -8,15 +18,68 @@ func length(lst: list): int {
     return count;
 }
 
-var students: list = [
-    [99111111, "person0", "test0", 18, 403111111],
-    [400111111, "person1", "test1", 18, 401111111],
-    [400222222, "person2", "test2", 19, 402222222],
-    [401111111, "person3", "test3", 16, 402111111],
-    [402111111, "person4", "test4", 19, null],
-    [402222222, "person5", "test5", 17, null],
-    [403111111, "person6", "test6", 14, null]
-];
+func charToInt(s : string) : int {
+    if (s == "0") {
+        return 0;
+    } else {
+        if (s == "1") {
+            return 1;
+        } else {
+            if (s == "2") {
+                return 2;
+            } else {
+                if (s == "3") {
+                    return 3;
+                } else {
+                    if (s == "4") {
+                        return 4;
+                    } else {
+                        if (s == "5") {
+                            return 5;
+                        } else {
+                            if (s == "6") {
+                                return 6;
+                            } else {
+                                if (s == "7") {
+                                    return 7;
+                                } else {
+                                    if (s == "8") {
+                                        return 8;
+                                    } else {
+                                        if (s == "9") {
+                                            return 9;
+                                        } else {
+                                            return -1;
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+func stringToInt(s: string) : int {
+    var emptyString: string = "";
+    
+    var index: int = 0;
+    var digit: int = 0;
+    var digitChar: string = s[index];
+
+    var result: int = 0;
+    while (digitChar != emptyString) {
+        digit = charToInt(digitChar);
+        result = result * 10;
+        result = result + digit;
+
+        index = index + 1;
+        digitChar = s[index];
+    }
+    return result;
+}
 
 func avg_gpa(mentor_id: int): int {
     var sum: int = 0;
