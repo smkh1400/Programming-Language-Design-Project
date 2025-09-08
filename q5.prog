@@ -17,31 +17,11 @@ var MENTEE: int = 4;
 
 var i: int = 0;
 var j: int = 0;
+var k: int = 0;
 var std_cnt: int = 0;
-
 var std: list[string] = [];
-
-std = students[std_cnt];
-while (std != "") {
-    std_cnt = std_cnt + 1;
-    std = students[std_cnt];
-}
-
-func get_year (std_code: string): string {
-    var year_new: string = "000";
-    var year_old: string = "00";
-
-    if (std_code[0] == "9") {
-        year_old[0] = std_code[0];
-        year_old[1] = std_code[1];
-        return year_old;
-    } else {
-        year_new[0] = std_code[0];
-        year_new[1] = std_code[1];
-        year_new[2] = std_code[2];
-        return year_new;
-    }
-}
+var std_a: list[string] = [];
+var std_b: list[string] = [];
 
 func char_to_int(s: string): int {
     if (s == "0") {
@@ -104,6 +84,32 @@ func string_to_int(s: string) : int {
     return result;
 }
 
+func get_year_from_code (std_code: string): string {
+    var year_new: string = "000";
+    var year_old: string = "00";
+
+    if (std_code[0] == "9") {
+        year_old[0] = std_code[0];
+        year_old[1] = std_code[1];
+        return year_old;
+    } else {
+        year_new[0] = std_code[0];
+        year_new[1] = std_code[1];
+        year_new[2] = std_code[2];
+        return year_new;
+    }
+}
+
+func set_std_cnt() : nulltype {
+    std_cnt = 0;
+    std = students[std_cnt];
+
+    while (std != "") {
+        std_cnt = std_cnt + 1;
+        std = students[std_cnt];
+    }
+}
+
 func find_student(std_code: string): int {
     i = 0;
     var result : int = -1;
@@ -117,13 +123,33 @@ func find_student(std_code: string): int {
     return result;
 }
 
-var id : int = 0;
-var cd : string = "400222222";
-id = find_student(cd);
-print(id);
+func sort_students(): nulltype {
+    var swapped: bool = true;
+    while(swapped) {
+        swapped = false;
+        for (i = 0; i < std_cnt; i = i + 1) {
+            for (j = i + 1; j < std_cnt; j = j + 1) {
+                var std_a: list[string] = students[i];
+                var std_b: list[string] = students[j];
+
+                if (std_a[CODE] == std_b[MENTEE]) {
+                    students[i] = std_b;
+                    students[j] = std_a;
+                    swapped = true;
+                }
+            }
+        }
+    }
+}
+
+set_std_cnt();
+sort_students();
 
 i = std_cnt - 1;
+print(i);
 while (i >= 0) {
     std = students[i];
+    var cd : string = std[CODE];
+    print(cd);
     i = i - 1;
 }
