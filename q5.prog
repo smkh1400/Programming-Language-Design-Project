@@ -1,0 +1,215 @@
+var students: list[list[string]] = [
+    ["99111111", "person0", "test0", "18", "403111111"],
+    ["400111111", "person1", "test1", "18", "401111111"],
+    ["400222222", "person2", "test2", "19", "402222222"],
+    ["401111111", "person3", "test3", "16", "402111111"],
+    ["402111111", "person4", "test4", "19", "null"],
+    ["402222222", "person5", "test5", "17", "null"],
+    ["403111111", "person6", "test6", "14", "null"]
+];
+var query_year: string = "400";
+
+var CODE: int = 0;
+var FIRST_NAME: int = 1;
+var LAST_NAME: int = 2;
+var SCORE: int = 3;
+var SCORE_SUM: int = 3;
+var MENTEE: int = 4;
+var MENTEE_CNT: int = 4;
+
+var i: int = 0;
+var j: int = 0;
+var k: int = 0;
+var std_cnt: int = 0;
+var std: list[string] = [];
+var std_a: list[string] = [];
+var std_b: list[string] = [];
+var empty_string: string = "";
+
+func char_to_int(s: string): int {
+    if (s == "0") {
+        return 0;
+    } else {
+        if (s == "1") {
+            return 1;
+        } else {
+            if (s == "2") {
+                return 2;
+            } else {
+                if (s == "3") {
+                    return 3;
+                } else {
+                    if (s == "4") {
+                        return 4;
+                    } else {
+                        if (s == "5") {
+                            return 5;
+                        } else {
+                            if (s == "6") {
+                                return 6;
+                            } else {
+                                if (s == "7") {
+                                    return 7;
+                                } else {
+                                    if (s == "8") {
+                                        return 8;
+                                    } else {
+                                        if (s == "9") {
+                                            return 9;
+                                        } else {
+                                            return -1;
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+func string_to_int(s: string) : int {
+    var index: int = 0;
+    var digit: int = 0;
+    var digit_char: string = s[index];
+
+    var result: int = 0;
+    while (digit_char != "") {
+        digit = char_to_int(digit_char);
+        result = result * 10;
+        result = result + digit;
+
+        index = index + 1;
+        digit_char = s[index];
+    }
+    return result;
+}
+
+func get_year_from_code (std_code: string): string {
+    var year_new: string = "000";
+    var year_old: string = "00";
+
+    if (std_code[0] == "9") {
+        year_old[0] = std_code[0];
+        year_old[1] = std_code[1];
+        return year_old;
+    } else {
+        year_new[0] = std_code[0];
+        year_new[1] = std_code[1];
+        year_new[2] = std_code[2];
+        return year_new;
+    }
+}
+
+func set_std_cnt() : nulltype {
+    std_cnt = 0;
+    std = students[std_cnt];
+
+    while (std != "") {
+        std_cnt = std_cnt + 1;
+        std = students[std_cnt];
+    }
+}
+
+func find_mentor(std_code: string): int {
+    j = 0;
+    var result : int = -1;
+    var mentor_candidate: list[string] = [];
+    while (j < std_cnt) {
+        mentor_candidate = students[j];
+        if (std_code == mentor_candidate[MENTEE]) {
+            result = j;
+        }
+        j = j + 1;
+    }
+    return result;
+}
+
+func sort_students(): nulltype {
+    var swapped: bool = true;
+    while(swapped) {
+        swapped = false;
+        for (i = 0; i < std_cnt; i = i + 1) {
+            for (j = i + 1; j < std_cnt; j = j + 1) {
+                var std_a: list[string] = students[i];
+                var std_b: list[string] = students[j];
+
+                if (std_a[CODE] == std_b[MENTEE]) {
+                    students[i] = std_b;
+                    students[j] = std_a;
+                    swapped = true;
+                }
+            }
+        }
+    }
+}
+
+func find_student_metrics(): nulltype {
+    i = std_cnt - 1;
+    while (i >= 0) {
+        std = students[i];
+        var std_code: string = std[CODE];
+        var std_score: string = std[SCORE];
+        var std_mentee: string = std[MENTEE];
+
+        var std_mentor: list[string] = [];
+        var std_mentor_index: int = find_mentor(std_code);
+
+        if (std_mentee == "null") {
+            std[MENTEE_CNT] = 0;
+            std[SCORE_SUM] = string_to_int(std_score);
+
+            students[i] = std;
+        }
+
+        if (std_mentor_index != -1) {
+            std_mentor = students[std_mentor_index];
+            std_mentor[MENTEE_CNT] = std[MENTEE_CNT] + 1;
+            std_mentor[SCORE_SUM] = std[SCORE_SUM] + string_to_int(std_mentor[SCORE]);
+            
+            students[std_mentor_index] = std_mentor;
+        }
+
+        i = i - 1;
+    }
+}
+
+func find_bm_id(): int {
+    var bm_index: int = 0;
+    var bm_avg: float = 0;
+    var avg: float = 0;
+
+    i = 0;
+    while (i < std_cnt) {
+        std = students[i];
+
+        if (std[MENTEE_CNT] > 0) {
+            avg = std[SCORE_SUM] / std[MENTEE_CNT];
+            if (avg > bm_avg) {
+                bm_avg = avg;
+                bm_index = i;
+            }
+        }
+
+        i = i + 1;
+    }
+
+    return bm_index;
+}
+
+func print_bm(): nulltype {
+    var id: int = find_bm_id();
+    var bm: list[string] = students[id];
+    var bm_first_name: string = bm[FIRST_NAME];
+    var bm_last_name: string = bm[LAST_NAME];
+
+    print(bm_first_name);
+    print(bm_last_name);
+}
+
+set_std_cnt();
+sort_students();
+find_student_metrics();
+print_bm();

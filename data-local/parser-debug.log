@@ -1,0 +1,2029 @@
+0	g884088	=	(g884089)
+1	g884089	=	(program EOF)
+2	program	=	(statement-list)
+3	statement-list	=	(statement statement-list)
+4	statement-list	=	()
+5	statement	=	(variable-declaration)
+6	statement	=	(function-declaration)
+7	statement	=	(assignment)
+8	statement	=	(if-statement)
+9	statement	=	(loop-statement)
+10	statement	=	(block)
+11	statement	=	(function-call)
+12	statement	=	(print-statement)
+13	statement	=	(return-statement)
+14	statement	=	(break-statement)
+15	statement	=	(continue-statement)
+16	break-statement	=	(BREAK SEMICOLON)
+17	continue-statement	=	(CONTINUE SEMICOLON)
+18	block	=	(OCB statement-list CCB)
+19	variable-declaration	=	(VAR ID COLON type ASSIGNMENT expression SEMICOLON)
+20	type	=	(INTTYPE)
+21	type	=	(FLOATTYPE)
+22	type	=	(STRINGTYPE)
+23	type	=	(BOOLTYPE)
+24	type	=	(LIST OB type CB)
+25	type	=	(NULLTYPE)
+26	function-declaration	=	(FUNC ID OP parameter-list CP COLON type block)
+27	parameter-list	=	(parameter COMMA parameter-list)
+28	parameter-list	=	(parameter)
+29	parameter-list	=	()
+30	parameter	=	(ID COLON type)
+31	assignment	=	(ID ASSIGNMENT expression SEMICOLON)
+32	if-statement	=	(IF OP expression CP block else-clause)
+33	else-clause	=	(ELSE block)
+34	else-clause	=	()
+35	loop-statement	=	(WHILE OP expression CP block)
+36	loop-statement	=	(FOR OP assignment SEMICOLON expression SEMICOLON assignment CP block)
+37	function-call	=	(ID OP argument-list CP SEMICOLON)
+38	function-call	=	(ID OP argument-list CP)
+39	argument-list	=	(expression COMMA argument-list)
+40	argument-list	=	(expression)
+41	argument-list	=	()
+42	print-statement	=	(PRINT OP expression CP SEMICOLON)
+43	return-statement	=	(RETURN expression SEMICOLON)
+44	expression	=	(simple-expression)
+45	expression	=	(simple-expression comparative-operator expression)
+46	simple-expression	=	(term)
+47	simple-expression	=	(simple-expression logical-operator term)
+48	term	=	(factor)
+49	term	=	(term arithmetic-operator factor)
+50	factor	=	(ID)
+51	factor	=	(literal)
+52	factor	=	(OP expression CP)
+53	factor	=	(function-call)
+54	factor	=	(unary-operator factor)
+55	factor	=	(NULL)
+56	literal	=	(INT)
+57	literal	=	(FLOAT)
+58	literal	=	(STRING)
+59	literal	=	(list-literal)
+60	literal	=	(TRUE)
+61	literal	=	(FALSE)
+62	list-literal	=	(OB expression-list CB)
+63	expression-list	=	(expression COMMA expression-list)
+64	expression-list	=	(expression)
+65	expression-list	=	()
+66	comparative-operator	=	(LT)
+67	comparative-operator	=	(GT)
+68	comparative-operator	=	(LET)
+69	comparative-operator	=	(GET)
+70	comparative-operator	=	(EQUALS)
+71	comparative-operator	=	(NOTEQUALS)
+72	logical-operator	=	(AND)
+73	logical-operator	=	(OR)
+74	arithmetic-operator	=	(PLUS)
+75	arithmetic-operator	=	(MINUS)
+76	arithmetic-operator	=	(TIMES)
+77	arithmetic-operator	=	(DIVIDE)
+78	arithmetic-operator	=	(MODULO)
+79	unary-operator	=	(MINUS)
+80	unary-operator	=	(NOT)
+State 0
+	g884088 -> . g884089 
+
+	statement					goto	4
+	FUNC					shift	18
+	function-declaration					goto	9
+	function-call					goto	13
+	g884089					goto	1
+	if-statement					goto	11
+	IF					shift	19
+	FOR					shift	21
+	WHILE					shift	20
+	assignment					goto	10
+	VAR					shift	17
+	block					goto	7
+	OCB					shift	26
+	variable-declaration					goto	8
+	break-statement					goto	5
+	loop-statement					goto	12
+	continue-statement					goto	6
+	program					goto	2
+	PRINT					shift	22
+	statement-list					goto	3
+	return-statement					goto	15
+	BREAK					shift	24
+	RETURN					shift	23
+	print-statement					goto	14
+	EOF					reduce	4
+	ID					shift	16
+	CONTINUE					shift	25
+
+State 1
+	g884088 -> g884089 . 
+
+
+State 2
+	g884089 -> program . EOF 
+
+	EOF					accept	
+
+State 3
+	program -> statement-list . 
+
+	EOF					reduce	2
+
+State 4
+	statement-list -> statement . statement-list 
+
+	statement					goto	4
+	FUNC					shift	18
+	function-declaration					goto	9
+	function-call					goto	13
+	if-statement					goto	11
+	IF					shift	19
+	FOR					shift	21
+	WHILE					shift	20
+	assignment					goto	10
+	block					goto	7
+	VAR					shift	17
+	OCB					shift	26
+	variable-declaration					goto	8
+	break-statement					goto	5
+	loop-statement					goto	12
+	continue-statement					goto	6
+	PRINT					shift	22
+	statement-list					goto	28
+	return-statement					goto	15
+	BREAK					shift	24
+	RETURN					shift	23
+	print-statement					goto	14
+	EOF					reduce	4
+	ID					shift	16
+	CONTINUE					shift	25
+	CCB					reduce	4
+
+State 5
+	statement -> break-statement . 
+
+	FUNC					reduce	14
+	IF					reduce	14
+	PRINT					reduce	14
+	FOR					reduce	14
+	WHILE					reduce	14
+	BREAK					reduce	14
+	RETURN					reduce	14
+	VAR					reduce	14
+	OCB					reduce	14
+	ID					reduce	14
+	EOF					reduce	14
+	CONTINUE					reduce	14
+	CCB					reduce	14
+
+State 6
+	statement -> continue-statement . 
+
+	FUNC					reduce	15
+	IF					reduce	15
+	PRINT					reduce	15
+	FOR					reduce	15
+	WHILE					reduce	15
+	BREAK					reduce	15
+	RETURN					reduce	15
+	VAR					reduce	15
+	OCB					reduce	15
+	ID					reduce	15
+	EOF					reduce	15
+	CONTINUE					reduce	15
+	CCB					reduce	15
+
+State 7
+	statement -> block . 
+
+	FUNC					reduce	10
+	IF					reduce	10
+	PRINT					reduce	10
+	FOR					reduce	10
+	WHILE					reduce	10
+	BREAK					reduce	10
+	RETURN					reduce	10
+	VAR					reduce	10
+	OCB					reduce	10
+	ID					reduce	10
+	EOF					reduce	10
+	CONTINUE					reduce	10
+	CCB					reduce	10
+
+State 8
+	statement -> variable-declaration . 
+
+	FUNC					reduce	5
+	IF					reduce	5
+	PRINT					reduce	5
+	FOR					reduce	5
+	WHILE					reduce	5
+	BREAK					reduce	5
+	RETURN					reduce	5
+	VAR					reduce	5
+	OCB					reduce	5
+	ID					reduce	5
+	EOF					reduce	5
+	CONTINUE					reduce	5
+	CCB					reduce	5
+
+State 9
+	statement -> function-declaration . 
+
+	FUNC					reduce	6
+	IF					reduce	6
+	PRINT					reduce	6
+	FOR					reduce	6
+	WHILE					reduce	6
+	BREAK					reduce	6
+	RETURN					reduce	6
+	VAR					reduce	6
+	OCB					reduce	6
+	ID					reduce	6
+	EOF					reduce	6
+	CONTINUE					reduce	6
+	CCB					reduce	6
+
+State 10
+	statement -> assignment . 
+
+	FUNC					reduce	7
+	IF					reduce	7
+	PRINT					reduce	7
+	FOR					reduce	7
+	WHILE					reduce	7
+	BREAK					reduce	7
+	RETURN					reduce	7
+	VAR					reduce	7
+	OCB					reduce	7
+	ID					reduce	7
+	EOF					reduce	7
+	CONTINUE					reduce	7
+	CCB					reduce	7
+
+State 11
+	statement -> if-statement . 
+
+	FUNC					reduce	8
+	IF					reduce	8
+	PRINT					reduce	8
+	FOR					reduce	8
+	WHILE					reduce	8
+	BREAK					reduce	8
+	RETURN					reduce	8
+	VAR					reduce	8
+	OCB					reduce	8
+	ID					reduce	8
+	EOF					reduce	8
+	CONTINUE					reduce	8
+	CCB					reduce	8
+
+State 12
+	statement -> loop-statement . 
+
+	FUNC					reduce	9
+	IF					reduce	9
+	PRINT					reduce	9
+	FOR					reduce	9
+	WHILE					reduce	9
+	BREAK					reduce	9
+	RETURN					reduce	9
+	VAR					reduce	9
+	OCB					reduce	9
+	ID					reduce	9
+	EOF					reduce	9
+	CONTINUE					reduce	9
+	CCB					reduce	9
+
+State 13
+	statement -> function-call . 
+
+	FUNC					reduce	11
+	IF					reduce	11
+	PRINT					reduce	11
+	FOR					reduce	11
+	WHILE					reduce	11
+	BREAK					reduce	11
+	RETURN					reduce	11
+	VAR					reduce	11
+	OCB					reduce	11
+	ID					reduce	11
+	EOF					reduce	11
+	CONTINUE					reduce	11
+	CCB					reduce	11
+
+State 14
+	statement -> print-statement . 
+
+	FUNC					reduce	12
+	IF					reduce	12
+	PRINT					reduce	12
+	FOR					reduce	12
+	WHILE					reduce	12
+	BREAK					reduce	12
+	RETURN					reduce	12
+	VAR					reduce	12
+	OCB					reduce	12
+	ID					reduce	12
+	EOF					reduce	12
+	CONTINUE					reduce	12
+	CCB					reduce	12
+
+State 15
+	statement -> return-statement . 
+
+	FUNC					reduce	13
+	IF					reduce	13
+	PRINT					reduce	13
+	FOR					reduce	13
+	WHILE					reduce	13
+	BREAK					reduce	13
+	RETURN					reduce	13
+	VAR					reduce	13
+	OCB					reduce	13
+	ID					reduce	13
+	EOF					reduce	13
+	CONTINUE					reduce	13
+	CCB					reduce	13
+
+State 16
+	assignment -> ID . ASSIGNMENT expression SEMICOLON 
+	function-call -> ID . OP argument-list CP SEMICOLON 
+	function-call -> ID . OP argument-list CP 
+
+	OP					shift	29
+	ASSIGNMENT					shift	30
+
+State 17
+	variable-declaration -> VAR . ID COLON type ASSIGNMENT expression SEMICOLON 
+
+	ID					shift	31
+
+State 18
+	function-declaration -> FUNC . ID OP parameter-list CP COLON type block 
+
+	ID					shift	32
+
+State 19
+	if-statement -> IF . OP expression CP block else-clause 
+
+	OP					shift	33
+
+State 20
+	loop-statement -> WHILE . OP expression CP block 
+
+	OP					shift	34
+
+State 21
+	loop-statement -> FOR . OP assignment SEMICOLON expression SEMICOLON assignment CP block 
+
+	OP					shift	35
+
+State 22
+	print-statement -> PRINT . OP expression CP SEMICOLON 
+
+	OP					shift	36
+
+State 23
+	return-statement -> RETURN . expression SEMICOLON 
+
+	MINUS					shift	54
+	expression					goto	38
+	function-call					goto	37
+	term					goto	40
+	literal					goto	42
+	FLOAT					shift	46
+	TRUE					shift	50
+	INT					shift	45
+	NULL					shift	48
+	FALSE					shift	51
+	STRING					shift	47
+	OB					shift	53
+	NOT					shift	55
+	list-literal					goto	43
+	OP					shift	52
+	unary-operator					goto	44
+	factor					goto	41
+	simple-expression					goto	39
+	ID					shift	49
+
+State 24
+	break-statement -> BREAK . SEMICOLON 
+
+	SEMICOLON					shift	56
+
+State 25
+	continue-statement -> CONTINUE . SEMICOLON 
+
+	SEMICOLON					shift	57
+
+State 26
+	block -> OCB . statement-list CCB 
+
+	statement					goto	4
+	function-declaration					goto	9
+	function-call					goto	13
+	FUNC					shift	18
+	if-statement					goto	11
+	IF					shift	19
+	FOR					shift	21
+	WHILE					shift	20
+	assignment					goto	10
+	block					goto	7
+	VAR					shift	17
+	OCB					shift	26
+	variable-declaration					goto	8
+	break-statement					goto	5
+	loop-statement					goto	12
+	continue-statement					goto	6
+	PRINT					shift	22
+	statement-list					goto	58
+	return-statement					goto	15
+	BREAK					shift	24
+	RETURN					shift	23
+	print-statement					goto	14
+	ID					shift	16
+	CONTINUE					shift	25
+	CCB					reduce	4
+
+State 27
+	g884089 -> program EOF . 
+
+
+State 28
+	statement-list -> statement statement-list . 
+
+	EOF					reduce	3
+	CCB					reduce	3
+
+State 29
+	function-call -> ID OP . argument-list CP SEMICOLON 
+	function-call -> ID OP . argument-list CP 
+
+	MINUS					shift	54
+	expression					goto	60
+	function-call					goto	37
+	term					goto	40
+	literal					goto	42
+	FLOAT					shift	46
+	TRUE					shift	50
+	INT					shift	45
+	CP					reduce	41
+	NULL					shift	48
+	FALSE					shift	51
+	OB					shift	53
+	STRING					shift	47
+	NOT					shift	55
+	list-literal					goto	43
+	OP					shift	52
+	unary-operator					goto	44
+	factor					goto	41
+	simple-expression					goto	39
+	ID					shift	49
+	argument-list					goto	59
+
+State 30
+	assignment -> ID ASSIGNMENT . expression SEMICOLON 
+
+	MINUS					shift	54
+	expression					goto	61
+	function-call					goto	37
+	term					goto	40
+	literal					goto	42
+	FLOAT					shift	46
+	TRUE					shift	50
+	INT					shift	45
+	NULL					shift	48
+	FALSE					shift	51
+	STRING					shift	47
+	OB					shift	53
+	NOT					shift	55
+	list-literal					goto	43
+	OP					shift	52
+	unary-operator					goto	44
+	factor					goto	41
+	simple-expression					goto	39
+	ID					shift	49
+
+State 31
+	variable-declaration -> VAR ID . COLON type ASSIGNMENT expression SEMICOLON 
+
+	COLON					shift	62
+
+State 32
+	function-declaration -> FUNC ID . OP parameter-list CP COLON type block 
+
+	OP					shift	63
+
+State 33
+	if-statement -> IF OP . expression CP block else-clause 
+
+	MINUS					shift	54
+	expression					goto	64
+	function-call					goto	37
+	term					goto	40
+	literal					goto	42
+	FLOAT					shift	46
+	TRUE					shift	50
+	INT					shift	45
+	NULL					shift	48
+	FALSE					shift	51
+	STRING					shift	47
+	OB					shift	53
+	NOT					shift	55
+	list-literal					goto	43
+	OP					shift	52
+	unary-operator					goto	44
+	factor					goto	41
+	simple-expression					goto	39
+	ID					shift	49
+
+State 34
+	loop-statement -> WHILE OP . expression CP block 
+
+	MINUS					shift	54
+	expression					goto	65
+	function-call					goto	37
+	term					goto	40
+	literal					goto	42
+	FLOAT					shift	46
+	TRUE					shift	50
+	INT					shift	45
+	NULL					shift	48
+	FALSE					shift	51
+	STRING					shift	47
+	OB					shift	53
+	NOT					shift	55
+	list-literal					goto	43
+	OP					shift	52
+	unary-operator					goto	44
+	factor					goto	41
+	simple-expression					goto	39
+	ID					shift	49
+
+State 35
+	loop-statement -> FOR OP . assignment SEMICOLON expression SEMICOLON assignment CP block 
+
+	ID					shift	67
+	assignment					goto	66
+
+State 36
+	print-statement -> PRINT OP . expression CP SEMICOLON 
+
+	MINUS					shift	54
+	expression					goto	68
+	function-call					goto	37
+	term					goto	40
+	literal					goto	42
+	FLOAT					shift	46
+	TRUE					shift	50
+	INT					shift	45
+	NULL					shift	48
+	FALSE					shift	51
+	STRING					shift	47
+	OB					shift	53
+	NOT					shift	55
+	list-literal					goto	43
+	OP					shift	52
+	unary-operator					goto	44
+	factor					goto	41
+	simple-expression					goto	39
+	ID					shift	49
+
+State 37
+	factor -> function-call . 
+
+	LET					reduce	53
+	MINUS					reduce	53
+	GET					reduce	53
+	COMMA					reduce	53
+	TIMES					reduce	53
+	MODULO					reduce	53
+	CP					reduce	53
+	LT					reduce	53
+	GT					reduce	53
+	NOTEQUALS					reduce	53
+	AND					reduce	53
+	SEMICOLON					reduce	53
+	DIVIDE					reduce	53
+	CB					reduce	53
+	OR					reduce	53
+	PLUS					reduce	53
+	EQUALS					reduce	53
+
+State 38
+	return-statement -> RETURN expression . SEMICOLON 
+
+	SEMICOLON					shift	69
+
+State 39
+	expression -> simple-expression . 
+	expression -> simple-expression . comparative-operator expression 
+	simple-expression -> simple-expression . logical-operator term 
+
+	LET					shift	74
+	GET					shift	75
+	comparative-operator					goto	70
+	COMMA					reduce	44
+	logical-operator					goto	71
+	CP					reduce	44
+	CB					reduce	44
+	OR					shift	79
+	LT					shift	72
+	AND					shift	78
+	NOTEQUALS					shift	77
+	EQUALS					shift	76
+	SEMICOLON					reduce	44
+	GT					shift	73
+
+State 40
+	simple-expression -> term . 
+	term -> term . arithmetic-operator factor 
+
+	LET					reduce	46
+	MINUS					shift	82
+	GET					reduce	46
+	COMMA					reduce	46
+	TIMES					shift	83
+	MODULO					shift	85
+	CP					reduce	46
+	LT					reduce	46
+	GT					reduce	46
+	NOTEQUALS					reduce	46
+	AND					reduce	46
+	SEMICOLON					reduce	46
+	arithmetic-operator					goto	80
+	DIVIDE					shift	84
+	CB					reduce	46
+	OR					reduce	46
+	PLUS					shift	81
+	EQUALS					reduce	46
+
+State 41
+	term -> factor . 
+
+	LET					reduce	48
+	MINUS					reduce	48
+	GET					reduce	48
+	COMMA					reduce	48
+	TIMES					reduce	48
+	MODULO					reduce	48
+	CP					reduce	48
+	LT					reduce	48
+	GT					reduce	48
+	NOTEQUALS					reduce	48
+	AND					reduce	48
+	SEMICOLON					reduce	48
+	DIVIDE					reduce	48
+	CB					reduce	48
+	OR					reduce	48
+	PLUS					reduce	48
+	EQUALS					reduce	48
+
+State 42
+	factor -> literal . 
+
+	LET					reduce	51
+	MINUS					reduce	51
+	GET					reduce	51
+	COMMA					reduce	51
+	TIMES					reduce	51
+	MODULO					reduce	51
+	CP					reduce	51
+	LT					reduce	51
+	GT					reduce	51
+	NOTEQUALS					reduce	51
+	AND					reduce	51
+	SEMICOLON					reduce	51
+	DIVIDE					reduce	51
+	CB					reduce	51
+	OR					reduce	51
+	PLUS					reduce	51
+	EQUALS					reduce	51
+
+State 43
+	literal -> list-literal . 
+
+	LET					reduce	59
+	MINUS					reduce	59
+	GET					reduce	59
+	COMMA					reduce	59
+	TIMES					reduce	59
+	MODULO					reduce	59
+	CP					reduce	59
+	LT					reduce	59
+	GT					reduce	59
+	NOTEQUALS					reduce	59
+	AND					reduce	59
+	SEMICOLON					reduce	59
+	DIVIDE					reduce	59
+	CB					reduce	59
+	OR					reduce	59
+	PLUS					reduce	59
+	EQUALS					reduce	59
+
+State 44
+	factor -> unary-operator . factor 
+
+	MINUS					shift	54
+	function-call					goto	37
+	list-literal					goto	43
+	OP					shift	52
+	unary-operator					goto	44
+	literal					goto	42
+	FLOAT					shift	46
+	TRUE					shift	50
+	factor					goto	86
+	INT					shift	45
+	NULL					shift	48
+	FALSE					shift	51
+	ID					shift	49
+	OB					shift	53
+	STRING					shift	47
+	NOT					shift	55
+
+State 45
+	literal -> INT . 
+
+	LET					reduce	56
+	MINUS					reduce	56
+	GET					reduce	56
+	COMMA					reduce	56
+	TIMES					reduce	56
+	MODULO					reduce	56
+	CP					reduce	56
+	LT					reduce	56
+	GT					reduce	56
+	NOTEQUALS					reduce	56
+	AND					reduce	56
+	SEMICOLON					reduce	56
+	DIVIDE					reduce	56
+	CB					reduce	56
+	OR					reduce	56
+	PLUS					reduce	56
+	EQUALS					reduce	56
+
+State 46
+	literal -> FLOAT . 
+
+	LET					reduce	57
+	MINUS					reduce	57
+	GET					reduce	57
+	COMMA					reduce	57
+	TIMES					reduce	57
+	MODULO					reduce	57
+	CP					reduce	57
+	LT					reduce	57
+	GT					reduce	57
+	NOTEQUALS					reduce	57
+	AND					reduce	57
+	SEMICOLON					reduce	57
+	DIVIDE					reduce	57
+	CB					reduce	57
+	OR					reduce	57
+	PLUS					reduce	57
+	EQUALS					reduce	57
+
+State 47
+	literal -> STRING . 
+
+	LET					reduce	58
+	MINUS					reduce	58
+	GET					reduce	58
+	COMMA					reduce	58
+	TIMES					reduce	58
+	MODULO					reduce	58
+	CP					reduce	58
+	LT					reduce	58
+	GT					reduce	58
+	NOTEQUALS					reduce	58
+	AND					reduce	58
+	SEMICOLON					reduce	58
+	DIVIDE					reduce	58
+	CB					reduce	58
+	OR					reduce	58
+	PLUS					reduce	58
+	EQUALS					reduce	58
+
+State 48
+	factor -> NULL . 
+
+	LET					reduce	55
+	MINUS					reduce	55
+	GET					reduce	55
+	COMMA					reduce	55
+	TIMES					reduce	55
+	MODULO					reduce	55
+	CP					reduce	55
+	LT					reduce	55
+	GT					reduce	55
+	NOTEQUALS					reduce	55
+	AND					reduce	55
+	SEMICOLON					reduce	55
+	DIVIDE					reduce	55
+	CB					reduce	55
+	OR					reduce	55
+	PLUS					reduce	55
+	EQUALS					reduce	55
+
+State 49
+	function-call -> ID . OP argument-list CP SEMICOLON 
+	function-call -> ID . OP argument-list CP 
+	factor -> ID . 
+
+	LET					reduce	50
+	MINUS					reduce	50
+	GET					reduce	50
+	COMMA					reduce	50
+	TIMES					reduce	50
+	MODULO					reduce	50
+	CP					reduce	50
+	LT					reduce	50
+	GT					reduce	50
+	NOTEQUALS					reduce	50
+	AND					reduce	50
+	SEMICOLON					reduce	50
+	OP					shift	29
+	DIVIDE					reduce	50
+	CB					reduce	50
+	OR					reduce	50
+	PLUS					reduce	50
+	EQUALS					reduce	50
+
+State 50
+	literal -> TRUE . 
+
+	LET					reduce	60
+	MINUS					reduce	60
+	GET					reduce	60
+	COMMA					reduce	60
+	TIMES					reduce	60
+	MODULO					reduce	60
+	CP					reduce	60
+	LT					reduce	60
+	GT					reduce	60
+	NOTEQUALS					reduce	60
+	AND					reduce	60
+	SEMICOLON					reduce	60
+	DIVIDE					reduce	60
+	CB					reduce	60
+	OR					reduce	60
+	PLUS					reduce	60
+	EQUALS					reduce	60
+
+State 51
+	literal -> FALSE . 
+
+	LET					reduce	61
+	MINUS					reduce	61
+	GET					reduce	61
+	COMMA					reduce	61
+	TIMES					reduce	61
+	MODULO					reduce	61
+	CP					reduce	61
+	LT					reduce	61
+	GT					reduce	61
+	NOTEQUALS					reduce	61
+	AND					reduce	61
+	SEMICOLON					reduce	61
+	DIVIDE					reduce	61
+	CB					reduce	61
+	OR					reduce	61
+	PLUS					reduce	61
+	EQUALS					reduce	61
+
+State 52
+	factor -> OP . expression CP 
+
+	MINUS					shift	54
+	expression					goto	87
+	function-call					goto	37
+	term					goto	40
+	literal					goto	42
+	FLOAT					shift	46
+	TRUE					shift	50
+	INT					shift	45
+	NULL					shift	48
+	FALSE					shift	51
+	STRING					shift	47
+	OB					shift	53
+	NOT					shift	55
+	list-literal					goto	43
+	OP					shift	52
+	unary-operator					goto	44
+	factor					goto	41
+	simple-expression					goto	39
+	ID					shift	49
+
+State 53
+	list-literal -> OB . expression-list CB 
+
+	MINUS					shift	54
+	expression					goto	88
+	function-call					goto	37
+	term					goto	40
+	literal					goto	42
+	FLOAT					shift	46
+	TRUE					shift	50
+	INT					shift	45
+	NULL					shift	48
+	FALSE					shift	51
+	OB					shift	53
+	STRING					shift	47
+	NOT					shift	55
+	list-literal					goto	43
+	OP					shift	52
+	unary-operator					goto	44
+	factor					goto	41
+	simple-expression					goto	39
+	CB					reduce	65
+	ID					shift	49
+	expression-list					goto	89
+
+State 54
+	unary-operator -> MINUS . 
+
+	MINUS					reduce	79
+	OP					reduce	79
+	FLOAT					reduce	79
+	TRUE					reduce	79
+	INT					reduce	79
+	NULL					reduce	79
+	FALSE					reduce	79
+	ID					reduce	79
+	OB					reduce	79
+	STRING					reduce	79
+	NOT					reduce	79
+
+State 55
+	unary-operator -> NOT . 
+
+	MINUS					reduce	80
+	OP					reduce	80
+	FLOAT					reduce	80
+	TRUE					reduce	80
+	INT					reduce	80
+	NULL					reduce	80
+	FALSE					reduce	80
+	ID					reduce	80
+	OB					reduce	80
+	STRING					reduce	80
+	NOT					reduce	80
+
+State 56
+	break-statement -> BREAK SEMICOLON . 
+
+	FUNC					reduce	16
+	IF					reduce	16
+	PRINT					reduce	16
+	FOR					reduce	16
+	WHILE					reduce	16
+	BREAK					reduce	16
+	RETURN					reduce	16
+	VAR					reduce	16
+	OCB					reduce	16
+	ID					reduce	16
+	EOF					reduce	16
+	CONTINUE					reduce	16
+	CCB					reduce	16
+
+State 57
+	continue-statement -> CONTINUE SEMICOLON . 
+
+	FUNC					reduce	17
+	IF					reduce	17
+	PRINT					reduce	17
+	FOR					reduce	17
+	WHILE					reduce	17
+	BREAK					reduce	17
+	RETURN					reduce	17
+	VAR					reduce	17
+	OCB					reduce	17
+	ID					reduce	17
+	EOF					reduce	17
+	CONTINUE					reduce	17
+	CCB					reduce	17
+
+State 58
+	block -> OCB statement-list . CCB 
+
+	CCB					shift	90
+
+State 59
+	function-call -> ID OP argument-list . CP SEMICOLON 
+	function-call -> ID OP argument-list . CP 
+
+	CP					shift	91
+
+State 60
+	argument-list -> expression . COMMA argument-list 
+	argument-list -> expression . 
+
+	CP					reduce	40
+	COMMA					shift	92
+
+State 61
+	assignment -> ID ASSIGNMENT expression . SEMICOLON 
+
+	SEMICOLON					shift	93
+
+State 62
+	variable-declaration -> VAR ID COLON . type ASSIGNMENT expression SEMICOLON 
+
+	BOOLTYPE					shift	97
+	INTTYPE					shift	95
+	type					goto	94
+	NULLTYPE					shift	100
+	LIST					shift	99
+	FLOATTYPE					shift	96
+	STRINGTYPE					shift	98
+
+State 63
+	function-declaration -> FUNC ID OP . parameter-list CP COLON type block 
+
+	CP					reduce	29
+	parameter-list					goto	101
+	ID					shift	103
+	parameter					goto	102
+
+State 64
+	if-statement -> IF OP expression . CP block else-clause 
+
+	CP					shift	104
+
+State 65
+	loop-statement -> WHILE OP expression . CP block 
+
+	CP					shift	105
+
+State 66
+	loop-statement -> FOR OP assignment . SEMICOLON expression SEMICOLON assignment CP block 
+
+	SEMICOLON					shift	106
+
+State 67
+	assignment -> ID . ASSIGNMENT expression SEMICOLON 
+
+	ASSIGNMENT					shift	30
+
+State 68
+	print-statement -> PRINT OP expression . CP SEMICOLON 
+
+	CP					shift	107
+
+State 69
+	return-statement -> RETURN expression SEMICOLON . 
+
+	FUNC					reduce	43
+	IF					reduce	43
+	PRINT					reduce	43
+	FOR					reduce	43
+	WHILE					reduce	43
+	BREAK					reduce	43
+	RETURN					reduce	43
+	VAR					reduce	43
+	OCB					reduce	43
+	ID					reduce	43
+	EOF					reduce	43
+	CONTINUE					reduce	43
+	CCB					reduce	43
+
+State 70
+	expression -> simple-expression comparative-operator . expression 
+
+	MINUS					shift	54
+	expression					goto	108
+	function-call					goto	37
+	term					goto	40
+	literal					goto	42
+	FLOAT					shift	46
+	TRUE					shift	50
+	INT					shift	45
+	NULL					shift	48
+	FALSE					shift	51
+	STRING					shift	47
+	OB					shift	53
+	NOT					shift	55
+	list-literal					goto	43
+	OP					shift	52
+	unary-operator					goto	44
+	factor					goto	41
+	simple-expression					goto	39
+	ID					shift	49
+
+State 71
+	simple-expression -> simple-expression logical-operator . term 
+
+	function-call					goto	37
+	MINUS					shift	54
+	term					goto	109
+	FLOAT					shift	46
+	literal					goto	42
+	TRUE					shift	50
+	INT					shift	45
+	NULL					shift	48
+	FALSE					shift	51
+	STRING					shift	47
+	OB					shift	53
+	NOT					shift	55
+	list-literal					goto	43
+	OP					shift	52
+	unary-operator					goto	44
+	factor					goto	41
+	ID					shift	49
+
+State 72
+	comparative-operator -> LT . 
+
+	MINUS					reduce	66
+	OP					reduce	66
+	FLOAT					reduce	66
+	TRUE					reduce	66
+	INT					reduce	66
+	NULL					reduce	66
+	FALSE					reduce	66
+	ID					reduce	66
+	OB					reduce	66
+	STRING					reduce	66
+	NOT					reduce	66
+
+State 73
+	comparative-operator -> GT . 
+
+	MINUS					reduce	67
+	OP					reduce	67
+	FLOAT					reduce	67
+	TRUE					reduce	67
+	INT					reduce	67
+	NULL					reduce	67
+	FALSE					reduce	67
+	ID					reduce	67
+	OB					reduce	67
+	STRING					reduce	67
+	NOT					reduce	67
+
+State 74
+	comparative-operator -> LET . 
+
+	MINUS					reduce	68
+	OP					reduce	68
+	FLOAT					reduce	68
+	TRUE					reduce	68
+	INT					reduce	68
+	NULL					reduce	68
+	FALSE					reduce	68
+	ID					reduce	68
+	OB					reduce	68
+	STRING					reduce	68
+	NOT					reduce	68
+
+State 75
+	comparative-operator -> GET . 
+
+	MINUS					reduce	69
+	OP					reduce	69
+	FLOAT					reduce	69
+	TRUE					reduce	69
+	INT					reduce	69
+	NULL					reduce	69
+	FALSE					reduce	69
+	ID					reduce	69
+	OB					reduce	69
+	STRING					reduce	69
+	NOT					reduce	69
+
+State 76
+	comparative-operator -> EQUALS . 
+
+	MINUS					reduce	70
+	OP					reduce	70
+	FLOAT					reduce	70
+	TRUE					reduce	70
+	INT					reduce	70
+	NULL					reduce	70
+	FALSE					reduce	70
+	ID					reduce	70
+	OB					reduce	70
+	STRING					reduce	70
+	NOT					reduce	70
+
+State 77
+	comparative-operator -> NOTEQUALS . 
+
+	MINUS					reduce	71
+	OP					reduce	71
+	FLOAT					reduce	71
+	TRUE					reduce	71
+	INT					reduce	71
+	NULL					reduce	71
+	FALSE					reduce	71
+	ID					reduce	71
+	OB					reduce	71
+	STRING					reduce	71
+	NOT					reduce	71
+
+State 78
+	logical-operator -> AND . 
+
+	MINUS					reduce	72
+	OP					reduce	72
+	FLOAT					reduce	72
+	TRUE					reduce	72
+	INT					reduce	72
+	NULL					reduce	72
+	FALSE					reduce	72
+	ID					reduce	72
+	OB					reduce	72
+	STRING					reduce	72
+	NOT					reduce	72
+
+State 79
+	logical-operator -> OR . 
+
+	MINUS					reduce	73
+	OP					reduce	73
+	FLOAT					reduce	73
+	TRUE					reduce	73
+	INT					reduce	73
+	NULL					reduce	73
+	FALSE					reduce	73
+	ID					reduce	73
+	OB					reduce	73
+	STRING					reduce	73
+	NOT					reduce	73
+
+State 80
+	term -> term arithmetic-operator . factor 
+
+	MINUS					shift	54
+	function-call					goto	37
+	list-literal					goto	43
+	OP					shift	52
+	unary-operator					goto	44
+	literal					goto	42
+	FLOAT					shift	46
+	TRUE					shift	50
+	factor					goto	110
+	INT					shift	45
+	NULL					shift	48
+	FALSE					shift	51
+	ID					shift	49
+	OB					shift	53
+	STRING					shift	47
+	NOT					shift	55
+
+State 81
+	arithmetic-operator -> PLUS . 
+
+	MINUS					reduce	74
+	OP					reduce	74
+	FLOAT					reduce	74
+	TRUE					reduce	74
+	INT					reduce	74
+	NULL					reduce	74
+	FALSE					reduce	74
+	ID					reduce	74
+	OB					reduce	74
+	STRING					reduce	74
+	NOT					reduce	74
+
+State 82
+	arithmetic-operator -> MINUS . 
+
+	MINUS					reduce	75
+	OP					reduce	75
+	FLOAT					reduce	75
+	TRUE					reduce	75
+	INT					reduce	75
+	NULL					reduce	75
+	FALSE					reduce	75
+	ID					reduce	75
+	OB					reduce	75
+	STRING					reduce	75
+	NOT					reduce	75
+
+State 83
+	arithmetic-operator -> TIMES . 
+
+	MINUS					reduce	76
+	OP					reduce	76
+	FLOAT					reduce	76
+	TRUE					reduce	76
+	INT					reduce	76
+	NULL					reduce	76
+	FALSE					reduce	76
+	ID					reduce	76
+	OB					reduce	76
+	STRING					reduce	76
+	NOT					reduce	76
+
+State 84
+	arithmetic-operator -> DIVIDE . 
+
+	MINUS					reduce	77
+	OP					reduce	77
+	FLOAT					reduce	77
+	TRUE					reduce	77
+	INT					reduce	77
+	NULL					reduce	77
+	FALSE					reduce	77
+	ID					reduce	77
+	OB					reduce	77
+	STRING					reduce	77
+	NOT					reduce	77
+
+State 85
+	arithmetic-operator -> MODULO . 
+
+	MINUS					reduce	78
+	OP					reduce	78
+	FLOAT					reduce	78
+	TRUE					reduce	78
+	INT					reduce	78
+	NULL					reduce	78
+	FALSE					reduce	78
+	ID					reduce	78
+	OB					reduce	78
+	STRING					reduce	78
+	NOT					reduce	78
+
+State 86
+	factor -> unary-operator factor . 
+
+	LET					reduce	54
+	MINUS					reduce	54
+	GET					reduce	54
+	COMMA					reduce	54
+	TIMES					reduce	54
+	MODULO					reduce	54
+	CP					reduce	54
+	LT					reduce	54
+	GT					reduce	54
+	NOTEQUALS					reduce	54
+	AND					reduce	54
+	SEMICOLON					reduce	54
+	DIVIDE					reduce	54
+	CB					reduce	54
+	OR					reduce	54
+	PLUS					reduce	54
+	EQUALS					reduce	54
+
+State 87
+	factor -> OP expression . CP 
+
+	CP					shift	111
+
+State 88
+	expression-list -> expression . COMMA expression-list 
+	expression-list -> expression . 
+
+	CB					reduce	64
+	COMMA					shift	112
+
+State 89
+	list-literal -> OB expression-list . CB 
+
+	CB					shift	113
+
+State 90
+	block -> OCB statement-list CCB . 
+
+	FUNC					reduce	18
+	IF					reduce	18
+	PRINT					reduce	18
+	FOR					reduce	18
+	WHILE					reduce	18
+	BREAK					reduce	18
+	RETURN					reduce	18
+	VAR					reduce	18
+	OCB					reduce	18
+	ELSE					reduce	18
+	ID					reduce	18
+	EOF					reduce	18
+	CONTINUE					reduce	18
+	CCB					reduce	18
+
+State 91
+	function-call -> ID OP argument-list CP . SEMICOLON 
+	function-call -> ID OP argument-list CP . 
+
+	LET					reduce	38
+	FUNC					reduce	38
+	MINUS					reduce	38
+	IF					reduce	38
+	WHILE					reduce	38
+	FOR					reduce	38
+	GET					reduce	38
+	VAR					reduce	38
+	COMMA					reduce	38
+	TIMES					reduce	38
+	OCB					reduce	38
+	MODULO					reduce	38
+	CP					reduce	38
+	LT					reduce	38
+begin conflict:
+	SEMICOLON					shift	114
+	SEMICOLON					reduce	38
+end conflict
+	GT					reduce	38
+	NOTEQUALS					reduce	38
+	AND					reduce	38
+	DIVIDE					reduce	38
+	PRINT					reduce	38
+	RETURN					reduce	38
+	BREAK					reduce	38
+	CB					reduce	38
+	ID					reduce	38
+	EOF					reduce	38
+	CONTINUE					reduce	38
+	OR					reduce	38
+	PLUS					reduce	38
+	CCB					reduce	38
+	EQUALS					reduce	38
+
+State 92
+	argument-list -> expression COMMA . argument-list 
+
+	MINUS					shift	54
+	expression					goto	60
+	function-call					goto	37
+	term					goto	40
+	literal					goto	42
+	FLOAT					shift	46
+	TRUE					shift	50
+	INT					shift	45
+	CP					reduce	41
+	NULL					shift	48
+	FALSE					shift	51
+	OB					shift	53
+	STRING					shift	47
+	NOT					shift	55
+	list-literal					goto	43
+	OP					shift	52
+	unary-operator					goto	44
+	factor					goto	41
+	simple-expression					goto	39
+	ID					shift	49
+	argument-list					goto	115
+
+State 93
+	assignment -> ID ASSIGNMENT expression SEMICOLON . 
+
+	FUNC					reduce	31
+	IF					reduce	31
+	WHILE					reduce	31
+	PRINT					reduce	31
+	FOR					reduce	31
+	BREAK					reduce	31
+	RETURN					reduce	31
+	VAR					reduce	31
+	OCB					reduce	31
+	CP					reduce	31
+	ID					reduce	31
+	EOF					reduce	31
+	CONTINUE					reduce	31
+	CCB					reduce	31
+	SEMICOLON					reduce	31
+
+State 94
+	variable-declaration -> VAR ID COLON type . ASSIGNMENT expression SEMICOLON 
+
+	ASSIGNMENT					shift	116
+
+State 95
+	type -> INTTYPE . 
+
+	OCB					reduce	20
+	CP					reduce	20
+	CB					reduce	20
+	COMMA					reduce	20
+	ASSIGNMENT					reduce	20
+
+State 96
+	type -> FLOATTYPE . 
+
+	OCB					reduce	21
+	CP					reduce	21
+	CB					reduce	21
+	COMMA					reduce	21
+	ASSIGNMENT					reduce	21
+
+State 97
+	type -> BOOLTYPE . 
+
+	OCB					reduce	23
+	CP					reduce	23
+	CB					reduce	23
+	COMMA					reduce	23
+	ASSIGNMENT					reduce	23
+
+State 98
+	type -> STRINGTYPE . 
+
+	OCB					reduce	22
+	CP					reduce	22
+	CB					reduce	22
+	COMMA					reduce	22
+	ASSIGNMENT					reduce	22
+
+State 99
+	type -> LIST . OB type CB 
+
+	OB					shift	117
+
+State 100
+	type -> NULLTYPE . 
+
+	OCB					reduce	25
+	CP					reduce	25
+	CB					reduce	25
+	COMMA					reduce	25
+	ASSIGNMENT					reduce	25
+
+State 101
+	function-declaration -> FUNC ID OP parameter-list . CP COLON type block 
+
+	CP					shift	118
+
+State 102
+	parameter-list -> parameter . COMMA parameter-list 
+	parameter-list -> parameter . 
+
+	CP					reduce	28
+	COMMA					shift	119
+
+State 103
+	parameter -> ID . COLON type 
+
+	COLON					shift	120
+
+State 104
+	if-statement -> IF OP expression CP . block else-clause 
+
+	OCB					shift	26
+	block					goto	121
+
+State 105
+	loop-statement -> WHILE OP expression CP . block 
+
+	OCB					shift	26
+	block					goto	122
+
+State 106
+	loop-statement -> FOR OP assignment SEMICOLON . expression SEMICOLON assignment CP block 
+
+	MINUS					shift	54
+	expression					goto	123
+	function-call					goto	37
+	term					goto	40
+	literal					goto	42
+	FLOAT					shift	46
+	TRUE					shift	50
+	INT					shift	45
+	NULL					shift	48
+	FALSE					shift	51
+	STRING					shift	47
+	OB					shift	53
+	NOT					shift	55
+	list-literal					goto	43
+	OP					shift	52
+	unary-operator					goto	44
+	factor					goto	41
+	simple-expression					goto	39
+	ID					shift	49
+
+State 107
+	print-statement -> PRINT OP expression CP . SEMICOLON 
+
+	SEMICOLON					shift	124
+
+State 108
+	expression -> simple-expression comparative-operator expression . 
+
+	CP					reduce	45
+	CB					reduce	45
+	COMMA					reduce	45
+	SEMICOLON					reduce	45
+
+State 109
+	simple-expression -> simple-expression logical-operator term . 
+	term -> term . arithmetic-operator factor 
+
+	LET					reduce	47
+	MINUS					shift	82
+	GET					reduce	47
+	COMMA					reduce	47
+	TIMES					shift	83
+	MODULO					shift	85
+	CP					reduce	47
+	LT					reduce	47
+	GT					reduce	47
+	NOTEQUALS					reduce	47
+	AND					reduce	47
+	SEMICOLON					reduce	47
+	arithmetic-operator					goto	80
+	DIVIDE					shift	84
+	CB					reduce	47
+	OR					reduce	47
+	PLUS					shift	81
+	EQUALS					reduce	47
+
+State 110
+	term -> term arithmetic-operator factor . 
+
+	LET					reduce	49
+	MINUS					reduce	49
+	GET					reduce	49
+	COMMA					reduce	49
+	TIMES					reduce	49
+	MODULO					reduce	49
+	CP					reduce	49
+	LT					reduce	49
+	GT					reduce	49
+	NOTEQUALS					reduce	49
+	AND					reduce	49
+	SEMICOLON					reduce	49
+	DIVIDE					reduce	49
+	CB					reduce	49
+	OR					reduce	49
+	PLUS					reduce	49
+	EQUALS					reduce	49
+
+State 111
+	factor -> OP expression CP . 
+
+	LET					reduce	52
+	MINUS					reduce	52
+	GET					reduce	52
+	COMMA					reduce	52
+	TIMES					reduce	52
+	MODULO					reduce	52
+	CP					reduce	52
+	LT					reduce	52
+	GT					reduce	52
+	NOTEQUALS					reduce	52
+	AND					reduce	52
+	SEMICOLON					reduce	52
+	DIVIDE					reduce	52
+	CB					reduce	52
+	OR					reduce	52
+	PLUS					reduce	52
+	EQUALS					reduce	52
+
+State 112
+	expression-list -> expression COMMA . expression-list 
+
+	MINUS					shift	54
+	expression					goto	88
+	function-call					goto	37
+	term					goto	40
+	literal					goto	42
+	FLOAT					shift	46
+	TRUE					shift	50
+	INT					shift	45
+	NULL					shift	48
+	FALSE					shift	51
+	OB					shift	53
+	STRING					shift	47
+	NOT					shift	55
+	list-literal					goto	43
+	OP					shift	52
+	unary-operator					goto	44
+	factor					goto	41
+	simple-expression					goto	39
+	CB					reduce	65
+	ID					shift	49
+	expression-list					goto	125
+
+State 113
+	list-literal -> OB expression-list CB . 
+
+	LET					reduce	62
+	MINUS					reduce	62
+	GET					reduce	62
+	COMMA					reduce	62
+	TIMES					reduce	62
+	MODULO					reduce	62
+	CP					reduce	62
+	LT					reduce	62
+	GT					reduce	62
+	NOTEQUALS					reduce	62
+	AND					reduce	62
+	SEMICOLON					reduce	62
+	DIVIDE					reduce	62
+	CB					reduce	62
+	OR					reduce	62
+	PLUS					reduce	62
+	EQUALS					reduce	62
+
+State 114
+	function-call -> ID OP argument-list CP SEMICOLON . 
+
+	LET					reduce	37
+	FUNC					reduce	37
+	MINUS					reduce	37
+	IF					reduce	37
+	WHILE					reduce	37
+	FOR					reduce	37
+	GET					reduce	37
+	VAR					reduce	37
+	COMMA					reduce	37
+	TIMES					reduce	37
+	OCB					reduce	37
+	MODULO					reduce	37
+	CP					reduce	37
+	LT					reduce	37
+	SEMICOLON					reduce	37
+	GT					reduce	37
+	NOTEQUALS					reduce	37
+	AND					reduce	37
+	DIVIDE					reduce	37
+	PRINT					reduce	37
+	RETURN					reduce	37
+	BREAK					reduce	37
+	CB					reduce	37
+	ID					reduce	37
+	EOF					reduce	37
+	CONTINUE					reduce	37
+	OR					reduce	37
+	PLUS					reduce	37
+	CCB					reduce	37
+	EQUALS					reduce	37
+
+State 115
+	argument-list -> expression COMMA argument-list . 
+
+	CP					reduce	39
+
+State 116
+	variable-declaration -> VAR ID COLON type ASSIGNMENT . expression SEMICOLON 
+
+	MINUS					shift	54
+	expression					goto	126
+	function-call					goto	37
+	term					goto	40
+	literal					goto	42
+	FLOAT					shift	46
+	TRUE					shift	50
+	INT					shift	45
+	NULL					shift	48
+	FALSE					shift	51
+	STRING					shift	47
+	OB					shift	53
+	NOT					shift	55
+	list-literal					goto	43
+	OP					shift	52
+	unary-operator					goto	44
+	factor					goto	41
+	simple-expression					goto	39
+	ID					shift	49
+
+State 117
+	type -> LIST OB . type CB 
+
+	BOOLTYPE					shift	97
+	INTTYPE					shift	95
+	type					goto	127
+	NULLTYPE					shift	100
+	LIST					shift	99
+	FLOATTYPE					shift	96
+	STRINGTYPE					shift	98
+
+State 118
+	function-declaration -> FUNC ID OP parameter-list CP . COLON type block 
+
+	COLON					shift	128
+
+State 119
+	parameter-list -> parameter COMMA . parameter-list 
+
+	CP					reduce	29
+	parameter-list					goto	129
+	ID					shift	103
+	parameter					goto	102
+
+State 120
+	parameter -> ID COLON . type 
+
+	BOOLTYPE					shift	97
+	INTTYPE					shift	95
+	type					goto	130
+	NULLTYPE					shift	100
+	LIST					shift	99
+	FLOATTYPE					shift	96
+	STRINGTYPE					shift	98
+
+State 121
+	if-statement -> IF OP expression CP block . else-clause 
+
+	else-clause					goto	131
+	FUNC					reduce	34
+	IF					reduce	34
+	PRINT					reduce	34
+	FOR					reduce	34
+	WHILE					reduce	34
+	BREAK					reduce	34
+	RETURN					reduce	34
+	VAR					reduce	34
+	OCB					reduce	34
+	ELSE					shift	132
+	ID					reduce	34
+	EOF					reduce	34
+	CONTINUE					reduce	34
+	CCB					reduce	34
+
+State 122
+	loop-statement -> WHILE OP expression CP block . 
+
+	FUNC					reduce	35
+	IF					reduce	35
+	PRINT					reduce	35
+	FOR					reduce	35
+	WHILE					reduce	35
+	BREAK					reduce	35
+	RETURN					reduce	35
+	VAR					reduce	35
+	OCB					reduce	35
+	ID					reduce	35
+	EOF					reduce	35
+	CONTINUE					reduce	35
+	CCB					reduce	35
+
+State 123
+	loop-statement -> FOR OP assignment SEMICOLON expression . SEMICOLON assignment CP block 
+
+	SEMICOLON					shift	133
+
+State 124
+	print-statement -> PRINT OP expression CP SEMICOLON . 
+
+	FUNC					reduce	42
+	IF					reduce	42
+	PRINT					reduce	42
+	FOR					reduce	42
+	WHILE					reduce	42
+	BREAK					reduce	42
+	RETURN					reduce	42
+	VAR					reduce	42
+	OCB					reduce	42
+	ID					reduce	42
+	EOF					reduce	42
+	CONTINUE					reduce	42
+	CCB					reduce	42
+
+State 125
+	expression-list -> expression COMMA expression-list . 
+
+	CB					reduce	63
+
+State 126
+	variable-declaration -> VAR ID COLON type ASSIGNMENT expression . SEMICOLON 
+
+	SEMICOLON					shift	134
+
+State 127
+	type -> LIST OB type . CB 
+
+	CB					shift	135
+
+State 128
+	function-declaration -> FUNC ID OP parameter-list CP COLON . type block 
+
+	BOOLTYPE					shift	97
+	INTTYPE					shift	95
+	type					goto	136
+	NULLTYPE					shift	100
+	LIST					shift	99
+	FLOATTYPE					shift	96
+	STRINGTYPE					shift	98
+
+State 129
+	parameter-list -> parameter COMMA parameter-list . 
+
+	CP					reduce	27
+
+State 130
+	parameter -> ID COLON type . 
+
+	CP					reduce	30
+	COMMA					reduce	30
+
+State 131
+	if-statement -> IF OP expression CP block else-clause . 
+
+	FUNC					reduce	32
+	IF					reduce	32
+	PRINT					reduce	32
+	FOR					reduce	32
+	WHILE					reduce	32
+	BREAK					reduce	32
+	RETURN					reduce	32
+	VAR					reduce	32
+	OCB					reduce	32
+	ID					reduce	32
+	EOF					reduce	32
+	CONTINUE					reduce	32
+	CCB					reduce	32
+
+State 132
+	else-clause -> ELSE . block 
+
+	OCB					shift	26
+	block					goto	137
+
+State 133
+	loop-statement -> FOR OP assignment SEMICOLON expression SEMICOLON . assignment CP block 
+
+	ID					shift	67
+	assignment					goto	138
+
+State 134
+	variable-declaration -> VAR ID COLON type ASSIGNMENT expression SEMICOLON . 
+
+	FUNC					reduce	19
+	IF					reduce	19
+	PRINT					reduce	19
+	FOR					reduce	19
+	WHILE					reduce	19
+	BREAK					reduce	19
+	RETURN					reduce	19
+	VAR					reduce	19
+	OCB					reduce	19
+	ID					reduce	19
+	EOF					reduce	19
+	CONTINUE					reduce	19
+	CCB					reduce	19
+
+State 135
+	type -> LIST OB type CB . 
+
+	OCB					reduce	24
+	CP					reduce	24
+	CB					reduce	24
+	COMMA					reduce	24
+	ASSIGNMENT					reduce	24
+
+State 136
+	function-declaration -> FUNC ID OP parameter-list CP COLON type . block 
+
+	OCB					shift	26
+	block					goto	139
+
+State 137
+	else-clause -> ELSE block . 
+
+	FUNC					reduce	33
+	IF					reduce	33
+	PRINT					reduce	33
+	FOR					reduce	33
+	WHILE					reduce	33
+	BREAK					reduce	33
+	RETURN					reduce	33
+	VAR					reduce	33
+	OCB					reduce	33
+	ID					reduce	33
+	EOF					reduce	33
+	CONTINUE					reduce	33
+	CCB					reduce	33
+
+State 138
+	loop-statement -> FOR OP assignment SEMICOLON expression SEMICOLON assignment . CP block 
+
+	CP					shift	140
+
+State 139
+	function-declaration -> FUNC ID OP parameter-list CP COLON type block . 
+
+	FUNC					reduce	26
+	IF					reduce	26
+	PRINT					reduce	26
+	FOR					reduce	26
+	WHILE					reduce	26
+	BREAK					reduce	26
+	RETURN					reduce	26
+	VAR					reduce	26
+	OCB					reduce	26
+	ID					reduce	26
+	EOF					reduce	26
+	CONTINUE					reduce	26
+	CCB					reduce	26
+
+State 140
+	loop-statement -> FOR OP assignment SEMICOLON expression SEMICOLON assignment CP . block 
+
+	OCB					shift	26
+	block					goto	141
+
+State 141
+	loop-statement -> FOR OP assignment SEMICOLON expression SEMICOLON assignment CP block . 
+
+	FUNC					reduce	36
+	IF					reduce	36
+	PRINT					reduce	36
+	FOR					reduce	36
+	WHILE					reduce	36
+	BREAK					reduce	36
+	RETURN					reduce	36
+	VAR					reduce	36
+	OCB					reduce	36
+	ID					reduce	36
+	EOF					reduce	36
+	CONTINUE					reduce	36
+	CCB					reduce	36
+
+1 shift/reduce conflict
