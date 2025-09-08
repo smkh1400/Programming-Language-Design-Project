@@ -13,7 +13,9 @@ var CODE: int = 0;
 var FIRST_NAME: int = 1;
 var LAST_NAME: int = 2;
 var SCORE: int = 3;
+var SCORE_SUM: int = 3;
 var MENTEE: int = 4;
+var MENTEE_CNT: int = 4;
 
 var i: int = 0;
 var j: int = 0;
@@ -22,6 +24,7 @@ var std_cnt: int = 0;
 var std: list[string] = [];
 var std_a: list[string] = [];
 var std_b: list[string] = [];
+var empty_string: string = "";
 
 func char_to_int(s: string): int {
     if (s == "0") {
@@ -110,15 +113,16 @@ func set_std_cnt() : nulltype {
     }
 }
 
-func find_student(std_code: string): int {
-    i = 0;
+func find_mentor(std_code: string): int {
+    j = 0;
     var result : int = -1;
-    while (i < std_cnt) {
-        std = students[i];
-        if (std_code == std[CODE]) {
-            result = i;
+    var mentor_candidate: list[string] = [];
+    while (j < std_cnt) {
+        mentor_candidate = students[j];
+        if (std_code == mentor_candidate[MENTEE]) {
+            result = j;
         }
-        i = i + 1;
+        j = j + 1;
     }
     return result;
 }
@@ -142,14 +146,67 @@ func sort_students(): nulltype {
     }
 }
 
+func find_student_metrics(): nulltype {
+    i = std_cnt - 1;
+    while (i >= 0) {
+        std = students[i];
+        var std_code: string = std[CODE];
+        var std_score: string = std[SCORE];
+        var std_mentee: string = std[MENTEE];
+
+        var std_mentor: list[string] = [];
+        var std_mentor_index: int = find_mentor(std_code);
+
+        if (std_mentee == "null") {
+            std[MENTEE_CNT] = 0;
+            std[SCORE_SUM] = string_to_int(std_score);
+
+            students[i] = std;
+        }
+
+        if (std_mentor_index != -1) {
+            std_mentor = students[std_mentor_index];
+            std_mentor[MENTEE_CNT] = std[MENTEE_CNT] + 1;
+            std_mentor[SCORE_SUM] = std[SCORE_SUM] + string_to_int(std_mentor[SCORE]);
+            
+            students[std_mentor_index] = std_mentor;
+        }
+
+        i = i - 1;
+    }
+}
+
+func find_bm_id(): int {
+    var bm_index: int = 0;
+    var bm_avg: float = 0;
+    var avg: float = 0;
+
+    i = 0;
+    while (i < std_cnt) {
+        std = students[i];
+
+        if (std[MENTEE_CNT] > 0) {
+            avg = std[SCORE_SUM] / std[MENTEE_CNT];
+            if (avg > bm_avg) {
+                bm_avg = avg;
+                bm_index = i;
+            }
+        }
+
+        i = i + 1;
+    }
+
+    return bm_index;
+}
+
+
 set_std_cnt();
 sort_students();
+find_student_metrics();
+var id: int = find_bm_id();
+var bm: list[string] = students[id];
+var bm_first_name: string = bm[FIRST_NAME];
+var bm_last_name: string = bm[LAST_NAME];
 
-i = std_cnt - 1;
-print(i);
-while (i >= 0) {
-    std = students[i];
-    var cd : string = std[CODE];
-    print(cd);
-    i = i - 1;
-}
+print(bm_first_name);
+print(bm_last_name);
