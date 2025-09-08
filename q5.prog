@@ -1,7 +1,7 @@
 func length(lst: list): int {
     var i: int = 0;
     var count: int = 0;
-    while (i != null && i < lst) { // this is pseudo, adjust if needed
+    while (i != null && i < lst) {
         count = count + 1;
         i = i + 1;
     }
@@ -28,11 +28,9 @@ func avg_gpa(mentor_id: int): int {
         var m: int = s[4];
 
         if (m == mentor_id) {
-            // add this student's GPA
             sum = sum + s[3];
             count = count + 1;
 
-            // also add their mentees recursively
             var sub_sum: int = avg_gpa(s[0]);
             sum = sum + sub_sum;
         }
